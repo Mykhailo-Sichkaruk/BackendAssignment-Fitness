@@ -1,0 +1,60 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum EXERCISE_DIFFICULTY {
+  EASY
+  MEDIUM
+  HARD
+}
+
+enum ROLE {
+  USER
+  ADMIN
+}
+
+model User {
+  id                 Int            @id @default(autoincrement())
+  name               String
+  surname            String
+  nickName           String
+  email              String         @unique
+  password           String
+  age                Int
+  role               ROLE
+  completedExercises CompletedExercise[]
+}
+
+model CompletedExercise {
+  id         Int      @id @default(autoincrement())
+  user       User     @relation(fields: [userId], references: [id])
+  userId     Int
+  exercise   Exercise @relation(fields: [exerciseId], references: [id])
+  exerciseId Int
+  date       DateTime
+  duration   Int
+}
+
+model Exercise {
+  id           Int                 @id @default(autoincrement())
+  difficulty   EXERCISE_DIFFICULTY
+  name         String              @db.VarChar(255)
+  program      Program             @relation(fields: [programId], references: [id])
+  programId    Int
+  completedExercise CompletedExercise[]
+}
+
+model Program {
+  id         Int                 @id @default(autoincrement())
+  name       String              @db.VarChar(255)
+  difficulty EXERCISE_DIFFICULTY
+  exercises  Exercise[]
+}
