@@ -4,17 +4,13 @@ import type {
   ExerciseNotFoundError,
 } from "../domain/model/exercise.js";
 import type {
+  PasswordIncorrectError,
   UserAlreadyExistsError,
   UserEntity,
   UserEntityPublicData,
   UserNotFoundError,
 } from "../domain/model/user.js";
 import type { ProgramNotFoundError } from "../domain/model/program.js";
-import type {
-  EmailNotFoundError,
-  InternalError,
-  PasswordIncorrectError,
-} from "../domain/error.js";
 import type { ExerciseService } from "../domain/service/exercise.js";
 import type { ProgramService } from "../domain/service/program.js";
 import type { UserService } from "../domain/service/user.js";
@@ -35,8 +31,7 @@ export interface AppService {
   createExercice(
     difficulty: EXERCISE_DIFFICULTY,
     name: string,
-    programId: number,
-  ): Promise<Result<ExerciseEntity, ProgramNotFoundError>>;
+  ): Promise<ExerciseEntity>;
   updateExercice(
     exerciseId: number,
     difficulty: EXERCISE_DIFFICULTY | undefined,
@@ -53,25 +48,19 @@ export interface AppService {
     age: number,
     role: string,
     password: string,
-  ): Promise<Result<JWTs, UserAlreadyExistsError | InternalError>>;
+  ): Promise<Result<JWTs, UserAlreadyExistsError>>;
   loginJWT(
     email: string,
     password: string,
-  ): Promise<
-    Result<JWTs, EmailNotFoundError | InternalError | PasswordIncorrectError>
-  >;
-  verifyAccessToken(
-    token: string,
-  ): Result<JWT_PAYLOAD, InternalError | TokenInvalidError>;
-  verifyRefreshToken(
-    token: string,
-  ): Result<JWTs, InternalError | TokenInvalidError>;
+  ): Promise<Result<JWTs, UserNotFoundError | PasswordIncorrectError>>;
+  verifyAccessToken(token: string): Result<JWT_PAYLOAD, TokenInvalidError>;
+  verifyRefreshToken(token: string): Result<JWTs, TokenInvalidError>;
   completeExercise(
     exerciseId: number,
     userId: number,
     date: Date,
     duration: number,
-  ): Promise<Result<void, ExerciseNotFoundError>>;
+  ): Promise<Result<void, ExerciseNotFoundError | UserNotFoundError>>;
   addExerciceToProgram(
     exerciseId: number,
     programId: number,
@@ -83,8 +72,6 @@ export interface AppService {
   getUserAllData(
     userId: number,
   ): Promise<Result<UserEntity, UserNotFoundError>>;
-  getAllUsersAllData(): Promise<Result<UserEntity[], InternalError>>;
-  getAllUsersPublicData(): Promise<
-    Result<UserEntityPublicData[], InternalError>
-  >;
+  getAllUsersAllData(): Promise<UserEntity[]>;
+  getAllUsersPublicData(): Promise<UserEntityPublicData[]>;
 }
