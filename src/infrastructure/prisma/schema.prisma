@@ -22,11 +22,11 @@ enum ROLE {
 }
 
 model User {
-  id                 Int            @id @default(autoincrement())
+  id                 Int                 @id @default(autoincrement())
   name               String
   surname            String
   nickName           String
-  email              String         @unique
+  email              String              @unique
   password           String
   age                Int
   role               ROLE
@@ -44,12 +44,11 @@ model CompletedExercise {
 }
 
 model Exercise {
-  id           Int                 @id @default(autoincrement())
-  difficulty   EXERCISE_DIFFICULTY
-  name         String              @db.VarChar(255)
-  program      Program             @relation(fields: [programId], references: [id])
-  programId    Int
+  id                Int                 @id @default(autoincrement())
+  difficulty        EXERCISE_DIFFICULTY
+  name              String              @db.VarChar(255)
   completedExercise CompletedExercise[]
+  programs          Program[]
 }
 
 model Program {

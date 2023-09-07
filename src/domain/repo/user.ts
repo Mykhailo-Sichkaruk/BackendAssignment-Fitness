@@ -6,7 +6,6 @@ import type {
   UserNotFoundError,
 } from "../model/user.js";
 import type { ExerciseNotFoundError } from "../model/exercise.js";
-import type { InternalError } from "../error.js";
 import type { Result } from "ts-results-es";
 
 export interface UserRepo {
@@ -18,11 +17,11 @@ export interface UserRepo {
     age: number,
     role: ROLE,
     hashedPassword: string,
-  ): Promise<Result<UserEntity, UserAlreadyExistsError | InternalError>>;
+  ): Promise<Result<UserEntity, UserAlreadyExistsError>>;
   getByEmail(email: string): Promise<Result<UserEntity, UserNotFoundError>>;
   getAllData(userId: number): Promise<Result<UserEntity, UserNotFoundError>>;
-  getAllDataAll(): Promise<Result<UserEntity[], InternalError>>;
-  getPublicDataAll(): Promise<Result<UserEntityPublicData[], InternalError>>;
+  getAllDataAll(): Promise<UserEntity[]>;
+  getPublicDataAll(): Promise<UserEntityPublicData[]>;
   addExerciceToCompletedList(
     exerciseId: number,
     userId: number,

@@ -4,20 +4,26 @@ import type { ExerciseEntity } from "./exercise.js";
 export { ROLE } from "@prisma/client";
 
 export class UserAlreadyExistsError extends Error {
+  name: "UserAlreadyExistsError";
   constructor() {
     super("User already exists, please try again with different email");
+    this.name = "UserAlreadyExistsError";
   }
 }
 
 export class UserNotFoundError extends Error {
-  constructor() {
-    super("User not found");
+  name: "UserNotFoundError";
+  constructor(message: string) {
+    super("User not found. " + message);
+    this.name = "UserNotFoundError";
   }
 }
 
 export class PasswordIncorrectError extends Error {
+  name: "PasswordIncorrectError";
   constructor() {
     super("Password incorrect");
+    this.name = "PasswordIncorrectError";
   }
 }
 

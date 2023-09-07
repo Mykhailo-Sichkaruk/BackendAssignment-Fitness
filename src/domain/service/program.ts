@@ -1,5 +1,4 @@
 import type { Result } from "ts-results-es";
-import type { InternalError } from "../error.js";
 import type { ProgramRepo } from "../repo/program.js";
 import type { ProgramEntity, ProgramNotFoundError } from "../model/program.js";
 import type {
@@ -13,7 +12,7 @@ export interface ProgramService {
     name: string,
     description: string,
     difficulty: EXERCISE_DIFFICULTY,
-  ): Promise<Result<ProgramEntity, InternalError>>;
+  ): Promise<ProgramEntity>;
   addExercice(
     exerciseId: number,
     programId: number,

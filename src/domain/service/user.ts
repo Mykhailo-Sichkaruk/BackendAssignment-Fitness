@@ -7,7 +7,6 @@ import type {
 } from "../model/user.js";
 import type { ExerciseNotFoundError } from "../model/exercise.js";
 import type { Result } from "ts-results-es";
-import type { InternalError } from "../error.js";
 import type { UserRepo } from "../repo/user.js";
 
 export interface UserService {
@@ -26,8 +25,8 @@ export interface UserService {
     password: string,
   ): Promise<Result<UserEntity, UserNotFoundError | PasswordIncorrectError>>;
   getAllData(userId: number): Promise<Result<UserEntity, UserNotFoundError>>;
-  getAllDataAll(): Promise<Result<UserEntity[], InternalError>>;
-  getPublicDataAll(): Promise<Result<UserEntityPublicData[], InternalError>>;
+  getAllDataAll(): Promise<UserEntity[]>;
+  getPublicDataAll(): Promise<UserEntityPublicData[]>;
   completeExercise(
     exerciseId: number,
     userId: number,
