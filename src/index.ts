@@ -1,24 +1,34 @@
-import http from 'http'
-import express from 'express'
-import * as bodyParser from 'body-parser'
+import type { ProcessMessage } from "./presentation/utils/types.js";
+import { ProcessMessagesType } from "./presentation/utils/types.js";
+import type { Worker } from "node:cluster";
+import EventEmitter from "node:events";
+import cluster from "node:cluster";
 
-import { sequelize } from './db'
-import ProgramRouter from './routes/programs'
-import ExerciseRouter from './routes/exercises'
+const children: Worker[] = [];
+const eventEmitter = new EventEmitter();
 
-const app = express()
+const createWorker = () => {
+  const worker = cluster.fork();
+  children.push(worker);
+  worker.on("message", (message: ProcessMessage) => {
+    if (message.status === ProcessMessagesType.EXITING) {
+      eventEmitter.emit("restarted");
+    }
+  });
 
-app.use(bodyParser.urlencoded({ extended: true }))
-app.use(bodyParser.json())
-app.use('/programs', ProgramRouter())
-app.use('/exercises', ExerciseRouter())
+  return worker;
+};
 
-const httpServer = http.createServer(app)
+const run = () => {
+  console.warn("Start app");
+  createWorker();
+  eventEmitter.on("restarted", () => {
+    createWorker();
+  });
+};
 
-sequelize.sync()
-
-console.log('Sync database', 'postgresql://localhost:5432/fitness_app')
-
-httpServer.listen(8000).on('listening', () => console.log(`Server started at port ${8000}`))
-
-export default httpServer
+if (cluster.isPrimary) {
+  run();
+} else {
+  import("./presentation/server.js");
+}
