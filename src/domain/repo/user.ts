@@ -24,7 +24,6 @@ export interface UserRepo {
     name: string | undefined,
     surname: string | undefined,
     nickName: string | undefined,
-    email: string | undefined,
     age: number | undefined,
     role: ROLE | undefined,
   ): Promise<Result<UserEntityNoPassword, UserNotFoundError>>;
@@ -37,8 +36,16 @@ export interface UserRepo {
   getPublicData(
     userId: number,
   ): Promise<Result<UserEntityPublicData, UserNotFoundError>>;
-  getAllDataAll(): Promise<UserEntityNoPassword[]>;
-  getPublicDataAll(): Promise<UserEntityPublicData[]>;
+  getAllDataAll(
+    searchNick: string | undefined,
+    page: number | undefined,
+    limit: number | undefined,
+  ): Promise<UserEntityNoPassword[]>;
+  getPublicDataAll(
+    searchNick: string | undefined,
+    page: number | undefined,
+    limit: number | undefined,
+  ): Promise<UserEntityPublicData[]>;
   addExerciceToCompletedList(
     exerciseId: number,
     userId: number,

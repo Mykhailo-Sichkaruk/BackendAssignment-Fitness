@@ -44,10 +44,15 @@ export interface AppService {
   deleteExercice(
     exerciseId: number,
   ): Promise<Result<void, ExerciseNotFoundError>>;
-  // getExercice(
-  //   exerciseId: number,
-  // ): Promise<Result<ExerciseEntity, ExerciseNotFoundError>>;
-  // getAllExercices(): Promise<ExerciseEntity[]>;
+  getExerciceById(
+    exerciseId: number,
+  ): Promise<Result<ExerciseEntity, ExerciseNotFoundError>>;
+  getManyExercice(
+    search: string | undefined,
+    page: number | undefined,
+    limit: number | undefined,
+    programId: number | undefined,
+  ): Promise<ExerciseEntity[]>;
   registerJWT(
     name: string,
     surname: string,
@@ -66,7 +71,6 @@ export interface AppService {
     name: string | undefined,
     surname: string | undefined,
     nickName: string | undefined,
-    email: string | undefined,
     age: number | undefined,
     role: ROLE | undefined,
   ): Promise<Result<UserEntityNoPassword, UserNotFoundError>>;
@@ -82,6 +86,20 @@ export interface AppService {
     name: string,
     difficulty: EXERCISE_DIFFICULTY,
   ): Promise<ProgramEntity>;
+  getProgramById(
+    programId: number,
+  ): Promise<Result<ProgramEntity, ProgramNotFoundError>>;
+  getManyProgram(
+    search: string | undefined,
+    page: number | undefined,
+    limit: number | undefined,
+  ): Promise<ProgramEntity[]>;
+  updateProgram(
+    programId: number,
+    difficulty: EXERCISE_DIFFICULTY | undefined,
+    name: string | undefined,
+  ): Promise<Result<ProgramEntity, ProgramNotFoundError>>;
+  deleteProgram(programId: number): Promise<Result<void, ProgramNotFoundError>>;
   addExerciceToProgram(
     exerciseId: number,
     programId: number,
@@ -90,12 +108,20 @@ export interface AppService {
     exerciseId: number,
     programId: number,
   ): Promise<Result<void, ProgramNotFoundError | ExerciseNotFoundError>>;
-  getUserAllData(
+  getOneUserAllData(
     userId: number,
   ): Promise<Result<UserEntityNoPassword, UserNotFoundError>>;
-  getUserPublicData(
+  getOneUserPublicData(
     userId: number,
   ): Promise<Result<UserEntityPublicData, UserNotFoundError>>;
-  getAllUsersAllData(): Promise<UserEntityNoPassword[]>;
-  getAllUsersPublicData(): Promise<UserEntityPublicData[]>;
+  getAllUsersAllData(
+    searchNick: string | undefined,
+    page: number | undefined,
+    limit: number | undefined,
+  ): Promise<UserEntityNoPassword[]>;
+  getAllUsersPublicData(
+    searchNick: string | undefined,
+    page: number | undefined,
+    limit: number | undefined,
+  ): Promise<UserEntityPublicData[]>;
 }

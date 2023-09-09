@@ -62,23 +62,21 @@ export class App implements AppService {
     name: string | undefined,
     surname: string | undefined,
     nickName: string | undefined,
-    email: string | undefined,
     age: number | undefined,
     role: ROLE | undefined,
   ) {
-    return await this.userService.update(
+    return await this.userService.userRepo.update(
       userId,
       name,
       surname,
       nickName,
-      email,
       age,
       role,
     );
   }
 
   async createExercice(difficulty: EXERCISE_DIFFICULTY, name: string) {
-    return await this.exerciseService.create(difficulty, name);
+    return await this.exerciseService.exerciseRepo.create(difficulty, name);
   }
 
   async updateExercice(
@@ -86,11 +84,33 @@ export class App implements AppService {
     difficulty: EXERCISE_DIFFICULTY | undefined,
     name: string | undefined,
   ) {
-    return await this.exerciseService.update(exerciseId, difficulty, name);
+    return await this.exerciseService.exerciseRepo.update(
+      exerciseId,
+      name,
+      difficulty,
+    );
+  }
+
+  async getExerciceById(exerciseId: number) {
+    return await this.exerciseService.exerciseRepo.getById(exerciseId);
+  }
+
+  async getManyExercice(
+    search: string | undefined,
+    page: number | undefined,
+    limit: number | undefined,
+    programId: number | undefined,
+  ) {
+    return await this.exerciseService.exerciseRepo.getMany(
+      search,
+      page,
+      limit,
+      programId,
+    );
   }
 
   async deleteExercice(exerciseId: number) {
-    return await this.exerciseService.delete(exerciseId);
+    return await this.exerciseService.exerciseRepo.delete(exerciseId);
   }
 
   async completeExercise(
@@ -99,7 +119,7 @@ export class App implements AppService {
     date: Date,
     duration: number,
   ) {
-    return await this.userService.completeExercise(
+    return await this.userService.userRepo.addExerciceToCompletedList(
       exerciseId,
       userId,
       date,
@@ -107,32 +127,82 @@ export class App implements AppService {
     );
   }
 
+  async getProgramById(programId: number) {
+    return await this.programService.programRepo.getById(programId);
+  }
+
+  async getManyProgram(
+    search: string | undefined,
+    page: number | undefined,
+    limit: number | undefined,
+  ) {
+    return await this.programService.programRepo.getMany(search, page, limit);
+  }
+
   async addExerciceToProgram(exerciseId: number, programId: number) {
-    return await this.programService.addExercice(exerciseId, programId);
+    return await this.programService.programRepo.addExercise(
+      exerciseId,
+      programId,
+    );
   }
 
   async removeExerciceFromProgram(exerciseId: number, programId: number) {
-    return await this.programService.removeExercice(exerciseId, programId);
+    return await this.programService.programRepo.removeExervice(
+      exerciseId,
+      programId,
+    );
   }
 
   async createProgram(name: string, difficulty: EXERCISE_DIFFICULTY) {
-    return await this.programService.create(name, difficulty);
+    return await this.programService.programRepo.create(name, difficulty);
   }
 
-  async getUserAllData(userId: number) {
-    return await this.userService.getAllData(userId);
+  async updateProgram(
+    programId: number,
+    name: string | undefined,
+    difficulty: EXERCISE_DIFFICULTY | undefined,
+  ) {
+    return await this.programService.programRepo.update(
+      programId,
+      name,
+      difficulty,
+    );
   }
 
-  async getUserPublicData(userId: number) {
-    return await this.userService.getPublicData(userId);
+  async deleteProgram(programId: number) {
+    return await this.programService.programRepo.delete(programId);
   }
 
-  async getAllUsersAllData() {
-    return await this.userService.getAllDataAll();
+  async getOneUserAllData(userId: number) {
+    return await this.userService.userRepo.getAllData(userId);
   }
 
-  async getAllUsersPublicData() {
-    return await this.userService.getPublicDataAll();
+  async getOneUserPublicData(userId: number) {
+    return await this.userService.userRepo.getPublicData(userId);
+  }
+
+  async getAllUsersAllData(
+    searchNick: string | undefined,
+    page: number | undefined,
+    limit: number | undefined,
+  ) {
+    return await this.userService.userRepo.getAllDataAll(
+      searchNick,
+      page,
+      limit,
+    );
+  }
+
+  async getAllUsersPublicData(
+    searchNick: string | undefined,
+    page: number | undefined,
+    limit: number | undefined,
+  ) {
+    return await this.userService.userRepo.getPublicDataAll(
+      searchNick,
+      page,
+      limit,
+    );
   }
 
   verifyAccessToken(token: string) {

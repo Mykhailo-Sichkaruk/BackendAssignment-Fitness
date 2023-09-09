@@ -17,6 +17,38 @@ export const programRepo: ProgramRepo = {
     });
   },
 
+  async getById(programId) {
+    const program = await prisma.program.findUnique({
+      where: {
+        id: programId,
+      },
+      include: {
+        exercises: true,
+      },
+    });
+    if (!program) return new Err(new ProgramNotFoundError());
+
+    return new Ok(program);
+  },
+
+  async getMany(search, page, limit) {
+    const programs = await prisma.program.findMany({
+      where: {
+        name: {
+          contains: search,
+        },
+      },
+      include: {
+        exercises: true,
+      },
+
+      skip: page && limit ? (page - 1) * limit : 0,
+      take: limit,
+    });
+
+    return programs;
+  },
+
   async update(programId, name, difficulty) {
     const program = await prisma.program.findUnique({
       where: {
@@ -58,7 +90,7 @@ export const programRepo: ProgramRepo = {
     return new Ok(undefined);
   },
 
-  async addToProgram(exerciseId, programId) {
+  async addExercise(exerciseId, programId) {
     const exercisePromise = prisma.exercise.findUnique({
       where: {
         id: exerciseId,
@@ -91,7 +123,7 @@ export const programRepo: ProgramRepo = {
     return new Ok(undefined);
   },
 
-  async removeFromProgram(exerciseId, programId) {
+  async removeExervice(exerciseId, programId) {
     const exercisePromise = prisma.exercise.findUnique({
       where: {
         id: exerciseId,

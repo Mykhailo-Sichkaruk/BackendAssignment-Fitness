@@ -11,12 +11,20 @@ export interface ProgramRepo {
     name: string | undefined,
     difficulty: EXERCISE_DIFFICULTY | undefined,
   ): Promise<Result<ProgramEntity, ProgramNotFoundError>>;
+  getById(
+    programId: number,
+  ): Promise<Result<ProgramEntity, ProgramNotFoundError>>;
+  getMany(
+    search: string | undefined,
+    page: number | undefined,
+    limit: number | undefined,
+  ): Promise<ProgramEntity[]>;
   delete(programId: number): Promise<Result<void, ProgramNotFoundError>>;
-  addToProgram(
+  addExercise(
     exerciseId: number,
     programId: number,
   ): Promise<Result<void, ExerciseNotFoundError | ProgramNotFoundError>>;
-  removeFromProgram(
+  removeExervice(
     exerciseId: number,
     programId: number,
   ): Promise<Result<void, ExerciseNotFoundError | ProgramNotFoundError>>;

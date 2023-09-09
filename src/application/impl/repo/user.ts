@@ -34,7 +34,7 @@ export const userRepo: UserRepo = {
     });
   },
 
-  async update(userId, name, surname, nickName, email, age, role) {
+  async update(userId, name, surname, nickName, age, role) {
     const user = await prisma.user.findUnique({
       where: { id: userId },
     });
@@ -46,7 +46,6 @@ export const userRepo: UserRepo = {
         name,
         surname,
         nickName,
-        email,
         age,
         role,
       },
@@ -131,8 +130,13 @@ export const userRepo: UserRepo = {
     return new Ok(user);
   },
 
-  async getAllDataAll() {
+  async getAllDataAll(
+    searchNick: string | undefined,
+    page: number | undefined,
+    limit: number | undefined,
+  ) {
     const users = await prisma.user.findMany({
+      where: { nickName: { contains: searchNick } },
       include: {
         completedExercises: {
           select: {
@@ -144,6 +148,8 @@ export const userRepo: UserRepo = {
           },
         },
       },
+      skip: page && limit ? (page - 1) * limit : 0,
+      take: limit,
     });
 
     return users.map((user) => ({
@@ -152,12 +158,19 @@ export const userRepo: UserRepo = {
     }));
   },
 
-  async getPublicDataAll() {
+  async getPublicDataAll(
+    searchNick: string | undefined,
+    page: number | undefined,
+    limit: number | undefined,
+  ) {
     return await prisma.user.findMany({
+      where: { nickName: { contains: searchNick } },
       select: {
         name: true,
         nickName: true,
       },
+      skip: page && limit ? (page - 1) * limit : 0,
+      take: limit,
     });
   },
 

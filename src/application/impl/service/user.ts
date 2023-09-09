@@ -31,26 +31,6 @@ export class UserServiceImpl implements UserService {
     );
   }
 
-  async update(
-    userId: number,
-    name: string | undefined,
-    surname: string | undefined,
-    nickName: string | undefined,
-    email: string | undefined,
-    age: number | undefined,
-    role: ROLE | undefined,
-  ) {
-    return await this.userRepo.update(
-      userId,
-      name,
-      surname,
-      nickName,
-      email,
-      age,
-      role,
-    );
-  }
-
   async login(email: string, password: string) {
     const userResult = await this.userRepo.getByEmailWithPassword(email);
     if (userResult.isErr()) return userResult;
@@ -60,35 +40,5 @@ export class UserServiceImpl implements UserService {
     }
 
     return new Err(new PasswordIncorrectError());
-  }
-
-  async getAllData(userId: number) {
-    return await this.userRepo.getAllData(userId);
-  }
-
-  async getPublicData(userId: number) {
-    return await this.userRepo.getPublicData(userId);
-  }
-
-  async getAllDataAll() {
-    return await this.userRepo.getAllDataAll();
-  }
-
-  async getPublicDataAll() {
-    return await this.userRepo.getPublicDataAll();
-  }
-
-  async completeExercise(
-    exerciseId: number,
-    userId: number,
-    date: Date,
-    duration: number,
-  ) {
-    return await this.userRepo.addExerciceToCompletedList(
-      exerciseId,
-      userId,
-      date,
-      duration,
-    );
   }
 }
