@@ -1,3 +1,4 @@
+import type { UserEntityNoPassword } from "../../../domain/model/user.js";
 import { ExerciseNotFoundError } from "../../../domain/model/exercise.js";
 import type { UserRepo } from "../../../domain/repo/user.js";
 import prisma from "../../../infrastructure/prisma.js";
@@ -28,11 +29,48 @@ export const userRepo: UserRepo = {
     });
     return new Ok({
       ...user,
+      password: undefined,
       completedExercises: [],
     });
   },
 
-  async getByEmail(email) {
+  async update(userId, name, surname, nickName, email, age, role) {
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+    });
+    if (user === null)
+      return new Err(new UserNotFoundError("UserId does not exist"));
+    const updatedUser = await prisma.user.update({
+      where: { id: userId },
+      data: {
+        name,
+        surname,
+        nickName,
+        email,
+        age,
+        role,
+      },
+      include: {
+        completedExercises: {
+          where: { user: { id: userId } },
+          select: {
+            id: true,
+            userId: true,
+            exerciseId: true,
+            date: true,
+            duration: true,
+          },
+        },
+      },
+    });
+
+    return new Ok({
+      ...updatedUser,
+      password: undefined,
+    });
+  },
+
+  async getByEmailWithPassword(email) {
     const user = await prisma.user.findUnique({
       where: { email },
       include: {
@@ -72,11 +110,29 @@ export const userRepo: UserRepo = {
     if (user === null) {
       return new Err(new UserNotFoundError("UserId does not exist"));
     }
+    const userNoPassword: UserEntityNoPassword = {
+      ...user,
+      password: undefined,
+    };
+    return new Ok(userNoPassword);
+  },
+
+  async getPublicData(userId) {
+    const user = await prisma.user.findUnique({
+      where: { id: Number(userId) },
+      select: {
+        name: true,
+        nickName: true,
+      },
+    });
+    if (user === null) {
+      return new Err(new UserNotFoundError("UserId does not exist"));
+    }
     return new Ok(user);
   },
 
   async getAllDataAll() {
-    return await prisma.user.findMany({
+    const users = await prisma.user.findMany({
       include: {
         completedExercises: {
           select: {
@@ -89,6 +145,11 @@ export const userRepo: UserRepo = {
         },
       },
     });
+
+    return users.map((user) => ({
+      ...user,
+      password: undefined,
+    }));
   },
 
   async getPublicDataAll() {

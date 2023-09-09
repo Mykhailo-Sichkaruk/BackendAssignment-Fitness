@@ -17,6 +17,47 @@ export const programRepo: ProgramRepo = {
     });
   },
 
+  async update(programId, name, difficulty) {
+    const program = await prisma.program.findUnique({
+      where: {
+        id: programId,
+      },
+    });
+    if (!program) return new Err(new ProgramNotFoundError());
+
+    return new Ok(
+      await prisma.program.update({
+        where: {
+          id: programId,
+        },
+        data: {
+          name,
+          difficulty,
+        },
+        include: {
+          exercises: true,
+        },
+      }),
+    );
+  },
+
+  async delete(programId) {
+    const program = await prisma.program.findUnique({
+      where: {
+        id: programId,
+      },
+    });
+    if (!program) return new Err(new ProgramNotFoundError());
+
+    await prisma.program.delete({
+      where: {
+        id: programId,
+      },
+    });
+
+    return new Ok(undefined);
+  },
+
   async addToProgram(exerciseId, programId) {
     const exercisePromise = prisma.exercise.findUnique({
       where: {

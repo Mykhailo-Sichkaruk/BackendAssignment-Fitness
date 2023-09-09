@@ -4,6 +4,7 @@ import type { ProgramService } from "../domain/service/program.js";
 import type { UserService } from "../domain/service/user.js";
 import type { AuthService } from "../domain/service/auth.js";
 import type { AppService } from "./appService.js";
+import type { ROLE } from "../domain/model/user.js";
 import { Ok } from "ts-results-es";
 
 export class App implements AppService {
@@ -30,7 +31,7 @@ export class App implements AppService {
     nickName: string,
     email: string,
     age: number,
-    role: string,
+    role: ROLE,
     password: string,
   ) {
     const userResult = await this.userService.create(
@@ -54,6 +55,26 @@ export class App implements AppService {
     const user = userResult.value;
 
     return new Ok(this.authService.generateTokens(user.id, user.role));
+  }
+
+  async updateUser(
+    userId: number,
+    name: string | undefined,
+    surname: string | undefined,
+    nickName: string | undefined,
+    email: string | undefined,
+    age: number | undefined,
+    role: ROLE | undefined,
+  ) {
+    return await this.userService.update(
+      userId,
+      name,
+      surname,
+      nickName,
+      email,
+      age,
+      role,
+    );
   }
 
   async createExercice(difficulty: EXERCISE_DIFFICULTY, name: string) {
@@ -94,16 +115,16 @@ export class App implements AppService {
     return await this.programService.removeExercice(exerciseId, programId);
   }
 
-  async createProgram(
-    name: string,
-    description: string,
-    difficulty: EXERCISE_DIFFICULTY,
-  ) {
-    return await this.programService.create(name, description, difficulty);
+  async createProgram(name: string, difficulty: EXERCISE_DIFFICULTY) {
+    return await this.programService.create(name, difficulty);
   }
 
   async getUserAllData(userId: number) {
     return await this.userService.getAllData(userId);
+  }
+
+  async getUserPublicData(userId: number) {
+    return await this.userService.getPublicData(userId);
   }
 
   async getAllUsersAllData() {

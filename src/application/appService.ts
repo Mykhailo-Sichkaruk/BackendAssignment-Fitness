@@ -5,12 +5,16 @@ import type {
 } from "../domain/model/exercise.js";
 import type {
   PasswordIncorrectError,
+  ROLE,
   UserAlreadyExistsError,
-  UserEntity,
+  UserEntityNoPassword,
   UserEntityPublicData,
   UserNotFoundError,
 } from "../domain/model/user.js";
-import type { ProgramNotFoundError } from "../domain/model/program.js";
+import type {
+  ProgramEntity,
+  ProgramNotFoundError,
+} from "../domain/model/program.js";
 import type { ExerciseService } from "../domain/service/exercise.js";
 import type { ProgramService } from "../domain/service/program.js";
 import type { UserService } from "../domain/service/user.js";
@@ -40,19 +44,32 @@ export interface AppService {
   deleteExercice(
     exerciseId: number,
   ): Promise<Result<void, ExerciseNotFoundError>>;
+  // getExercice(
+  //   exerciseId: number,
+  // ): Promise<Result<ExerciseEntity, ExerciseNotFoundError>>;
+  // getAllExercices(): Promise<ExerciseEntity[]>;
   registerJWT(
     name: string,
     surname: string,
     nickName: string,
     email: string,
     age: number,
-    role: string,
+    role: ROLE,
     password: string,
   ): Promise<Result<JWTs, UserAlreadyExistsError>>;
   loginJWT(
     email: string,
     password: string,
   ): Promise<Result<JWTs, UserNotFoundError | PasswordIncorrectError>>;
+  updateUser(
+    userId: number,
+    name: string | undefined,
+    surname: string | undefined,
+    nickName: string | undefined,
+    email: string | undefined,
+    age: number | undefined,
+    role: ROLE | undefined,
+  ): Promise<Result<UserEntityNoPassword, UserNotFoundError>>;
   verifyAccessToken(token: string): Result<JWT_PAYLOAD, TokenInvalidError>;
   verifyRefreshToken(token: string): Result<JWTs, TokenInvalidError>;
   completeExercise(
@@ -61,6 +78,10 @@ export interface AppService {
     date: Date,
     duration: number,
   ): Promise<Result<void, ExerciseNotFoundError | UserNotFoundError>>;
+  createProgram(
+    name: string,
+    difficulty: EXERCISE_DIFFICULTY,
+  ): Promise<ProgramEntity>;
   addExerciceToProgram(
     exerciseId: number,
     programId: number,
@@ -71,7 +92,10 @@ export interface AppService {
   ): Promise<Result<void, ProgramNotFoundError | ExerciseNotFoundError>>;
   getUserAllData(
     userId: number,
-  ): Promise<Result<UserEntity, UserNotFoundError>>;
-  getAllUsersAllData(): Promise<UserEntity[]>;
+  ): Promise<Result<UserEntityNoPassword, UserNotFoundError>>;
+  getUserPublicData(
+    userId: number,
+  ): Promise<Result<UserEntityPublicData, UserNotFoundError>>;
+  getAllUsersAllData(): Promise<UserEntityNoPassword[]>;
   getAllUsersPublicData(): Promise<UserEntityPublicData[]>;
 }

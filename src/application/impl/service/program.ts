@@ -12,6 +12,18 @@ export class ProgramServiceImpl implements ProgramService {
     return await this.programRepo.create(name, difficulty);
   }
 
+  async update(
+    programId: number,
+    name: string | undefined,
+    difficulty: EXERCISE_DIFFICULTY | undefined,
+  ) {
+    return await this.programRepo.update(programId, name, difficulty);
+  }
+
+  async delete(programId: number) {
+    return await this.programRepo.delete(programId);
+  }
+
   async addExercice(exerciseId: number, programId: number) {
     return await this.programRepo.addToProgram(exerciseId, programId);
   }
