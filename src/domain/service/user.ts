@@ -1,7 +1,8 @@
 import type {
   PasswordIncorrectError,
+  ROLE,
   UserAlreadyExistsError,
-  UserEntity,
+  UserEntityNoPassword,
   UserEntityPublicData,
   UserNotFoundError,
 } from "../model/user.js";
@@ -17,15 +18,31 @@ export interface UserService {
     nickName: string,
     email: string,
     age: number,
-    role: string,
+    role: ROLE,
     password: string,
-  ): Promise<Result<UserEntity, UserAlreadyExistsError>>;
+  ): Promise<Result<UserEntityNoPassword, UserAlreadyExistsError>>;
+  update(
+    userId: number,
+    name: string | undefined,
+    surname: string | undefined,
+    nickName: string | undefined,
+    email: string | undefined,
+    age: number | undefined,
+    role: ROLE | undefined,
+  ): Promise<Result<UserEntityNoPassword, UserNotFoundError>>;
   login(
     email: string,
     password: string,
-  ): Promise<Result<UserEntity, UserNotFoundError | PasswordIncorrectError>>;
-  getAllData(userId: number): Promise<Result<UserEntity, UserNotFoundError>>;
-  getAllDataAll(): Promise<UserEntity[]>;
+  ): Promise<
+    Result<UserEntityNoPassword, UserNotFoundError | PasswordIncorrectError>
+  >;
+  getAllData(
+    userId: number,
+  ): Promise<Result<UserEntityNoPassword, UserNotFoundError>>;
+  getPublicData(
+    userId: number,
+  ): Promise<Result<UserEntityPublicData, UserNotFoundError>>;
+  getAllDataAll(): Promise<UserEntityNoPassword[]>;
   getPublicDataAll(): Promise<UserEntityPublicData[]>;
   completeExercise(
     exerciseId: number,

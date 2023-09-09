@@ -8,11 +8,13 @@ import type {
 
 export interface ProgramService {
   programRepo: ProgramRepo;
-  create(
+  create(name: string, difficulty: EXERCISE_DIFFICULTY): Promise<ProgramEntity>;
+  update(
+    programId: number,
     name: string,
-    description: string,
     difficulty: EXERCISE_DIFFICULTY,
-  ): Promise<ProgramEntity>;
+  ): Promise<Result<ProgramEntity, ProgramNotFoundError>>;
+  delete(programId: number): Promise<Result<void, ProgramNotFoundError>>;
   addExercice(
     exerciseId: number,
     programId: number,

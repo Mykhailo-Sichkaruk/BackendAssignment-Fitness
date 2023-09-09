@@ -48,7 +48,9 @@ export type UserEntity = {
   completedExercises: CompletedExercises[];
 };
 
-export type UserEntityNoPassword = Omit<UserEntity, "password">;
+export type UserEntityNoPassword = Omit<UserEntity, "password"> & {
+  password: undefined;
+};
 
 export type UserEntityPublicData = {
   name: string;

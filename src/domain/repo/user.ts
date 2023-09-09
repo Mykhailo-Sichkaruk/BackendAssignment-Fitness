@@ -2,6 +2,7 @@ import type {
   ROLE,
   UserAlreadyExistsError,
   UserEntity,
+  UserEntityNoPassword,
   UserEntityPublicData,
   UserNotFoundError,
 } from "../model/user.js";
@@ -17,10 +18,26 @@ export interface UserRepo {
     age: number,
     role: ROLE,
     hashedPassword: string,
-  ): Promise<Result<UserEntity, UserAlreadyExistsError>>;
-  getByEmail(email: string): Promise<Result<UserEntity, UserNotFoundError>>;
-  getAllData(userId: number): Promise<Result<UserEntity, UserNotFoundError>>;
-  getAllDataAll(): Promise<UserEntity[]>;
+  ): Promise<Result<UserEntityNoPassword, UserAlreadyExistsError>>;
+  update(
+    userId: number,
+    name: string | undefined,
+    surname: string | undefined,
+    nickName: string | undefined,
+    email: string | undefined,
+    age: number | undefined,
+    role: ROLE | undefined,
+  ): Promise<Result<UserEntityNoPassword, UserNotFoundError>>;
+  getByEmailWithPassword(
+    email: string,
+  ): Promise<Result<UserEntity, UserNotFoundError>>;
+  getAllData(
+    userId: number,
+  ): Promise<Result<UserEntityNoPassword, UserNotFoundError>>;
+  getPublicData(
+    userId: number,
+  ): Promise<Result<UserEntityPublicData, UserNotFoundError>>;
+  getAllDataAll(): Promise<UserEntityNoPassword[]>;
   getPublicDataAll(): Promise<UserEntityPublicData[]>;
   addExerciceToCompletedList(
     exerciseId: number,

@@ -6,6 +6,12 @@ import type { Result } from "ts-results-es";
 
 export interface ProgramRepo {
   create(name: string, difficulty: EXERCISE_DIFFICULTY): Promise<ProgramEntity>;
+  update(
+    programId: number,
+    name: string | undefined,
+    difficulty: EXERCISE_DIFFICULTY | undefined,
+  ): Promise<Result<ProgramEntity, ProgramNotFoundError>>;
+  delete(programId: number): Promise<Result<void, ProgramNotFoundError>>;
   addToProgram(
     exerciseId: number,
     programId: number,
