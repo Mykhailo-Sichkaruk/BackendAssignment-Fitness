@@ -1,15 +1,22 @@
 import crypto from "crypto";
 
-export const hash = (password: string): string => {
-  const salt = crypto.randomBytes(16).toString("hex");
-  const hashed = crypto.scryptSync(password, salt, 64).toString("hex");
+const KEYLEN = 64;
+const SALT_LEN = 16;
+
+export const hash = (userPassword: string): string => {
+  const salt = crypto.randomBytes(SALT_LEN).toString("hex");
+  const hashed = crypto.scryptSync(userPassword, salt, KEYLEN).toString("hex");
   return `${salt}:${hashed}`;
 };
 
-export const verify = (password: string, hash: string): boolean => {
-  const [key, salt] = hash.split(":");
-  const keyBuffer = Buffer.from(key, "hex");
-  const saltBuffer = Buffer.from(salt, "hex");
-  const derivedKey = crypto.scryptSync(password, saltBuffer, 64);
-  return crypto.timingSafeEqual(keyBuffer, derivedKey);
+export const verify = (userPassword: string, dbHash: string): boolean => {
+  try {
+    const [salt, dbPassword] = dbHash.split(":");
+    const dbPasswordHash = Buffer.from(dbPassword, "hex");
+    const userPasswordHash = crypto.scryptSync(userPassword, salt, KEYLEN);
+    return crypto.timingSafeEqual(dbPasswordHash, userPasswordHash);
+  } catch (error: any) {
+    console.error(error);
+    return false;
+  }
 };
