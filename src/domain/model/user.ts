@@ -53,6 +53,6 @@ export type UserEntityNoPassword = Omit<UserEntity, "password"> & {
 };
 
 export type UserEntityPublicData = {
-  name: string;
+  id: number;
   nickName: string;
 };

@@ -120,7 +120,7 @@ export const userRepo: UserRepo = {
     const user = await prisma.user.findUnique({
       where: { id: Number(userId) },
       select: {
-        name: true,
+        id: true,
         nickName: true,
       },
     });
@@ -166,7 +166,7 @@ export const userRepo: UserRepo = {
     return await prisma.user.findMany({
       where: { nickName: { contains: searchNick } },
       select: {
-        name: true,
+        id: true,
         nickName: true,
       },
       skip: page && limit ? (page - 1) * limit : 0,
