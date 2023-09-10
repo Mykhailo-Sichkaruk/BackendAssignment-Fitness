@@ -1,6 +1,6 @@
 import { StatusCodes as Code, getReasonPhrase } from "http-status-codes";
 import type { NextFunction, Request, Response } from "express";
-import env from "../../config/env.js";
+import env from "#config/env.js";
 import { Router } from "express";
 
 const router: Router = Router();

@@ -1,7 +1,7 @@
-import { PasswordIncorrectError } from "../../../domain/model/user.js";
-import type { UserService } from "../../../domain/service/user.js";
-import type { UserRepo } from "../../../domain/repo/user.js";
-import type { ROLE } from "../../../domain/model/user.js";
+import { PasswordIncorrectError } from "#domain/model/user.js";
+import type { UserService } from "#domain/service/user.js";
+import type { UserRepo } from "#domain/repo/user.js";
+import type { ROLE } from "#domain/model/user.js";
 import { hash, verify } from "../utils.js";
 import { Err, Ok } from "ts-results-es";
 

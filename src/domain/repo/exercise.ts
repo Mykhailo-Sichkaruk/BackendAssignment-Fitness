@@ -1,10 +1,10 @@
+import type { ProgramId } from "#domain/model/program.js";
 import type {
   EXERCISE_DIFFICULTY,
   ExerciseEntity,
   ExerciseId,
   ExerciseNotFoundError,
-} from "../model/exercise.js";
-import type { ProgramId } from "../model/program.js";
+} from "#domain/model/exercise.js";
 import type { Result } from "ts-results-es";
 
 export interface ExerciseRepo {

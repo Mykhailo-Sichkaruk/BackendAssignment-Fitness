@@ -1,8 +1,11 @@
-import type { ExerciseId, ExerciseNotFoundError } from "../model/exercise.js";
-import type { ProgramId, ProgramNotFoundError } from "../model/program.js";
-import type { EXERCISE_DIFFICULTY } from "../model/program.js";
+import type { ProgramId, ProgramNotFoundError } from "#domain/model/program.js";
+import type { EXERCISE_DIFFICULTY } from "#domain/model/program.js";
 import type { ProgramEntity } from "../model/program.js";
 import type { Result } from "ts-results-es";
+import type {
+  ExerciseId,
+  ExerciseNotFoundError,
+} from "#domain/model/exercise.js";
 
 export interface ProgramRepo {
   create(name: string, difficulty: EXERCISE_DIFFICULTY): Promise<ProgramEntity>;

@@ -12,7 +12,7 @@ import swaggerUi from "swagger-ui-express";
 import authRouter from "./routes/auth.js";
 import userRouter from "./routes/user.js";
 import { fileURLToPath } from "node:url";
-import env from "../config/env.js";
+import env from "#config/env.js";
 import express from "express";
 import http from "node:http";
 import * as path from "path";

@@ -1,4 +1,4 @@
-import type { ExerciseRepo } from "../repo/exercise.js";
+import type { ExerciseRepo } from "#domain/repo/exercise.js";
 
 export interface ExerciseService {
   exerciseRepo: ExerciseRepo;

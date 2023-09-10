@@ -1,14 +1,14 @@
 import type {
   EXERCISE_DIFFICULTY,
   ExerciseId,
-} from "../domain/model/exercise.js";
-import type { ExerciseService } from "../domain/service/exercise.js";
-import type { ProgramService } from "../domain/service/program.js";
-import type { UserService } from "../domain/service/user.js";
-import type { AuthService } from "../domain/service/auth.js";
-import type { ProgramId } from "../domain/model/program.js";
-import type { UserId } from "../domain/model/user.js";
-import type { ROLE } from "../domain/model/user.js";
+} from "#domain/model/exercise.js";
+import type { ExerciseService } from "#domain/service/exercise.js";
+import type { ProgramService } from "#domain/service/program.js";
+import type { UserService } from "#domain/service/user.js";
+import type { AuthService } from "#domain/service/auth.js";
+import type { ProgramId } from "#domain/model/program.js";
+import type { UserId } from "#domain/model/user.js";
+import type { ROLE } from "#domain/model/user.js";
 import type { AppService } from "./appService.js";
 import { Ok } from "ts-results-es";
 

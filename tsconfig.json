@@ -28,11 +28,6 @@
     "baseUrl": "./src",
     "paths": {
       "#*": ["./*"]
-      // "#repo/*": ["./domain/repo/*"],
-      // "#model/*": ["./domain/model/*"],
-      // "#service/*": ["./domain/service/*"],
-      // "#impl/repo/*": ["./application/impl/repo*"],
-      // "#impl/service/*": ["./application/impl/service*"]
     },
     // "rootDirs": [],                                   /* Allow multiple folders to be treated as one when resolving modules. */
     // "typeRoots": [],                                  /* Specify multiple folders that act like './node_modules/@types'. */
@@ -99,21 +94,6 @@
     "skipDefaultLibCheck": true /* Skip type checking .d.ts files that are included with TypeScript. */,
     "skipLibCheck": true /* Skip type checking all .d.ts files. */
   },
-  "include": [
-    "./src/**.ts",
-    "./src/**/*.ts",
-    "./src/**/*.d.ts",
-    "./src/**/*.json"
-  ],
-  "exclude": [
-    "./node_modules",
-    "./build/**",
-    "./src/**/*.spec.ts",
-    "./src/**/*.test.ts",
-    "./src/**/*.spec.tsx",
-    "./src/**/*.test.tsx"
-  ],
-  "ts-node": {
-    "esm": true
-  }
+  "include": ["./src/"],
+  "exclude": ["./node_modules", "./build/**"]
 }

@@ -1,9 +1,9 @@
-import type { ExerciseId } from "../../domain/model/exercise.js";
 import type { NextFunction, Request, Response } from "express";
-import type { UserId } from "../../domain/model/user.js";
+import type { ExerciseId } from "#domain/model/exercise.js";
 import { StatusCodes as Code } from "http-status-codes";
-import type { ROLE } from "../../domain/model/user.js";
 import verifyAccessToken from "../middleware/auth.js";
+import type { UserId } from "#domain/model/user.js";
+import type { ROLE } from "#domain/model/user.js";
 import isAdmin from "../middleware/isAdmin.js";
 import { create } from "ts-opaque";
 import { Router } from "express";

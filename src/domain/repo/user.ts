@@ -1,3 +1,8 @@
+import type { Result } from "ts-results-es";
+import type {
+  ExerciseId,
+  ExerciseNotFoundError,
+} from "#domain/model/exercise.js";
 import type {
   ROLE,
   UserAlreadyExistsError,
@@ -6,9 +11,7 @@ import type {
   UserEntityPublicData,
   UserId,
   UserNotFoundError,
-} from "../model/user.js";
-import type { ExerciseId, ExerciseNotFoundError } from "../model/exercise.js";
-import type { Result } from "ts-results-es";
+} from "#domain/model/user.js";
 
 export interface UserRepo {
   create(

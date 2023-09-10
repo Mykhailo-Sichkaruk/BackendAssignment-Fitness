@@ -1,9 +1,9 @@
-import type { AuthService } from "../../../domain/service/auth.js";
-import { TokenInvalidError } from "../../../domain/model/auth.js";
-import type { JWT_PAYLOAD } from "../../../domain/model/auth.js";
-import type { ROLE } from "../../../domain/model/user.js";
-import env from "../../../config/env.js";
+import type { AuthService } from "#domain/service/auth.js";
+import { TokenInvalidError } from "#domain/model/auth.js";
+import type { JWT_PAYLOAD } from "#domain/model/auth.js";
+import type { ROLE } from "#domain/model/user.js";
 import { Err, Ok } from "ts-results-es";
+import env from "#config/env.js";
 import jwt from "jsonwebtoken";
 
 export const AuthServiceImpl: AuthService = {

@@ -1,18 +1,18 @@
+import { ExerciseNotFoundError } from "#domain/model/exercise.js";
+import type { UserRepo } from "#domain/repo/user.js";
+import prisma from "#infrastructure/prisma.js";
 import type {
   UserEntity,
   UserEntityNoPassword,
   UserEntityPublicData,
   UserId,
-} from "../../../domain/model/user.js";
-import { create } from "ts-opaque";
-import { ExerciseNotFoundError } from "../../../domain/model/exercise.js";
-import type { UserRepo } from "../../../domain/repo/user.js";
-import prisma from "../../../infrastructure/prisma.js";
+} from "#domain/model/user.js";
 import { Err, Ok } from "ts-results-es";
+import { create } from "ts-opaque";
 import {
   UserAlreadyExistsError,
   UserNotFoundError,
-} from "../../../domain/model/user.js";
+} from "#domain/model/user.js";
 
 export const userRepo: UserRepo = {
   async create(name, surname, nickName, email, age, role, hashedPassword) {

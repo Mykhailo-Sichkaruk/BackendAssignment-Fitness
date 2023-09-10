@@ -1,4 +1,4 @@
-import type { ROLE, UserId } from "../../domain/model/user.js";
+import type { ROLE, UserId } from "#domain/model/user.js";
 import type {
   JWT_PAYLOAD,
   JWTs,

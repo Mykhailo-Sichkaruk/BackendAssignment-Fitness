@@ -1,4 +1,4 @@
-import type { ROLE } from "../../domain/model/user.js";
+import type { ROLE } from "#domain/model/user.js";
 
 export const enum ProcessMessagesType {
   EXITING = "EXITING",

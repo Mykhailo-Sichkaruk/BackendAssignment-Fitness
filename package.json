@@ -16,6 +16,9 @@
   },
   "author": "richard.solar@goodrequest.com",
   "license": "ISC",
+  "imports": {
+    "#*": "./src/*"
+  },
   "dependencies": {
     "@goodrequest/passport-jwt-wrapper": "^1.7.1",
     "@prisma/client": "^5.2.0",

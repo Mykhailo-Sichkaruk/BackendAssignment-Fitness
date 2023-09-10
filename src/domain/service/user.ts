@@ -1,12 +1,12 @@
+import type { UserRepo } from "#domain/repo/user.js";
+import type { Result } from "ts-results-es";
 import type {
   PasswordIncorrectError,
   ROLE,
   UserAlreadyExistsError,
   UserEntityNoPassword,
   UserNotFoundError,
-} from "../model/user.js";
-import type { Result } from "ts-results-es";
-import type { UserRepo } from "../repo/user.js";
+} from "#domain/model/user.js";
 
 export interface UserService {
   userRepo: UserRepo;

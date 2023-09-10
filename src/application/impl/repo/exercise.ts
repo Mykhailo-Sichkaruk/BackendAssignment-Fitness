@@ -1,7 +1,7 @@
-import { ExerciseNotFoundError } from "../../../domain/model/exercise.js";
-import type { ExerciseEntity } from "../../../domain/model/exercise.js";
-import type { ExerciseRepo } from "../../../domain/repo/exercise.js";
-import prisma from "../../../infrastructure/prisma.js";
+import { ExerciseNotFoundError } from "#domain/model/exercise.js";
+import type { ExerciseEntity } from "#domain/model/exercise.js";
+import type { ExerciseRepo } from "#domain/repo/exercise.js";
+import prisma from "#infrastructure/prisma.js";
 import { Err, Ok } from "ts-results-es";
 
 export const exerciseRepo: ExerciseRepo = {

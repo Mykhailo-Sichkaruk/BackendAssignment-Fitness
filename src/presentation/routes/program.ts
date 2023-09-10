@@ -1,13 +1,13 @@
 import type { NextFunction, Request, Response } from "express";
-import type { ProgramId } from "../../domain/model/program.js";
+import type { ProgramId } from "#domain/model/program.js";
 import { StatusCodes as Code } from "http-status-codes";
 import verifyAccessToken from "../middleware/auth.js";
 import isAdmin from "../middleware/isAdmin.js";
+import { create } from "ts-opaque";
 import type {
   EXERCISE_DIFFICULTY,
   ExerciseId,
-} from "../../domain/model/exercise.js";
-import { create } from "ts-opaque";
+} from "#domain/model/exercise.js";
 import { Router } from "express";
 import app from "../context.js";
 

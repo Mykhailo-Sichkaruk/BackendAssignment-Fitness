@@ -3,7 +3,7 @@ import type {
   ExerciseEntity,
   ExerciseId,
   ExerciseNotFoundError,
-} from "../domain/model/exercise.js";
+} from "#domain/model/exercise.js";
 import type {
   PasswordIncorrectError,
   ROLE,
@@ -12,21 +12,21 @@ import type {
   UserEntityPublicData,
   UserId,
   UserNotFoundError,
-} from "../domain/model/user.js";
+} from "#domain/model/user.js";
 import type {
   ProgramEntity,
   ProgramId,
   ProgramNotFoundError,
-} from "../domain/model/program.js";
-import type { ExerciseService } from "../domain/service/exercise.js";
-import type { ProgramService } from "../domain/service/program.js";
-import type { UserService } from "../domain/service/user.js";
-import type { AuthService } from "../domain/service/auth.js";
+} from "#domain/model/program.js";
+import type { ExerciseService } from "#domain/service/exercise.js";
+import type { ProgramService } from "#domain/service/program.js";
+import type { UserService } from "#domain/service/user.js";
+import type { AuthService } from "#domain/service/auth.js";
 import type {
   JWT_PAYLOAD,
   JWTs,
   TokenInvalidError,
-} from "../domain/model/auth.js";
+} from "#domain/model/auth.js";
 import type { Result } from "ts-results-es";
 
 export interface AppService {

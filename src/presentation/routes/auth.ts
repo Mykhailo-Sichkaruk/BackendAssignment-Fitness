@@ -1,6 +1,6 @@
 import type { NextFunction, Request, Response } from "express";
 import { StatusCodes as Code } from "http-status-codes";
-import type { ROLE } from "../../domain/model/user.js";
+import type { ROLE } from "#domain/model/user.js";
 import { Router } from "express";
 import app from "../context.js";
 
