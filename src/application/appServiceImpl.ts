@@ -95,7 +95,7 @@ export class App implements AppService {
     return await this.exerciseService.exerciseRepo.getById(exerciseId);
   }
 
-  async getManyExercice(
+  async getManyExercices(
     search: string | undefined,
     page: number | undefined,
     limit: number | undefined,
@@ -131,7 +131,7 @@ export class App implements AppService {
     return await this.programService.programRepo.getById(programId);
   }
 
-  async getManyProgram(
+  async getManyPrograms(
     search: string | undefined,
     page: number | undefined,
     limit: number | undefined,
@@ -173,32 +173,32 @@ export class App implements AppService {
     return await this.programService.programRepo.delete(programId);
   }
 
-  async getOneUserAllData(userId: number) {
-    return await this.userService.userRepo.getAllData(userId);
+  async getOneUserPrivateData(userId: number) {
+    return await this.userService.userRepo.getOnePrivateData(userId);
   }
 
   async getOneUserPublicData(userId: number) {
-    return await this.userService.userRepo.getPublicData(userId);
+    return await this.userService.userRepo.getOnePublicData(userId);
   }
 
-  async getAllUsersAllData(
+  async getManyUsersPrivateData(
     searchNick: string | undefined,
     page: number | undefined,
     limit: number | undefined,
   ) {
-    return await this.userService.userRepo.getAllDataAll(
+    return await this.userService.userRepo.getManyPrivateData(
       searchNick,
       page,
       limit,
     );
   }
 
-  async getAllUsersPublicData(
+  async getManyUsersPublicData(
     searchNick: string | undefined,
     page: number | undefined,
     limit: number | undefined,
   ) {
-    return await this.userService.userRepo.getPublicDataAll(
+    return await this.userService.userRepo.getManyPublicData(
       searchNick,
       page,
       limit,

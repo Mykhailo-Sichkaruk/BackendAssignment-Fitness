@@ -30,18 +30,18 @@ export interface UserRepo {
   getByEmailWithPassword(
     email: string,
   ): Promise<Result<UserEntity, UserNotFoundError>>;
-  getAllData(
+  getOnePrivateData(
     userId: number,
   ): Promise<Result<UserEntityNoPassword, UserNotFoundError>>;
-  getPublicData(
+  getOnePublicData(
     userId: number,
   ): Promise<Result<UserEntityPublicData, UserNotFoundError>>;
-  getAllDataAll(
+  getManyPrivateData(
     searchNick: string | undefined,
     page: number | undefined,
     limit: number | undefined,
   ): Promise<UserEntityNoPassword[]>;
-  getPublicDataAll(
+  getManyPublicData(
     searchNick: string | undefined,
     page: number | undefined,
     limit: number | undefined,

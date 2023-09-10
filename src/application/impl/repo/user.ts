@@ -91,7 +91,7 @@ export const userRepo: UserRepo = {
     return new Ok(user);
   },
 
-  async getAllData(userId) {
+  async getOnePrivateData(userId) {
     const user = await prisma.user.findUnique({
       where: { id: Number(userId) },
       include: {
@@ -116,7 +116,7 @@ export const userRepo: UserRepo = {
     return new Ok(userNoPassword);
   },
 
-  async getPublicData(userId) {
+  async getOnePublicData(userId) {
     const user = await prisma.user.findUnique({
       where: { id: Number(userId) },
       select: {
@@ -130,7 +130,7 @@ export const userRepo: UserRepo = {
     return new Ok(user);
   },
 
-  async getAllDataAll(
+  async getManyPrivateData(
     searchNick: string | undefined,
     page: number | undefined,
     limit: number | undefined,
@@ -158,7 +158,7 @@ export const userRepo: UserRepo = {
     }));
   },
 
-  async getPublicDataAll(
+  async getManyPublicData(
     searchNick: string | undefined,
     page: number | undefined,
     limit: number | undefined,

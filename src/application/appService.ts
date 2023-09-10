@@ -47,7 +47,7 @@ export interface AppService {
   getExerciceById(
     exerciseId: number,
   ): Promise<Result<ExerciseEntity, ExerciseNotFoundError>>;
-  getManyExercice(
+  getManyExercices(
     search: string | undefined,
     page: number | undefined,
     limit: number | undefined,
@@ -89,7 +89,7 @@ export interface AppService {
   getProgramById(
     programId: number,
   ): Promise<Result<ProgramEntity, ProgramNotFoundError>>;
-  getManyProgram(
+  getManyPrograms(
     search: string | undefined,
     page: number | undefined,
     limit: number | undefined,
@@ -108,18 +108,18 @@ export interface AppService {
     exerciseId: number,
     programId: number,
   ): Promise<Result<void, ProgramNotFoundError | ExerciseNotFoundError>>;
-  getOneUserAllData(
+  getOneUserPrivateData(
     userId: number,
   ): Promise<Result<UserEntityNoPassword, UserNotFoundError>>;
-  getOneUserPublicData(
+  getOneUserPrivateData(
     userId: number,
   ): Promise<Result<UserEntityPublicData, UserNotFoundError>>;
-  getAllUsersAllData(
+  getManyUsersPrivateData(
     searchNick: string | undefined,
     page: number | undefined,
     limit: number | undefined,
   ): Promise<UserEntityNoPassword[]>;
-  getAllUsersPublicData(
+  getManyUsersPublicData(
     searchNick: string | undefined,
     page: number | undefined,
     limit: number | undefined,
