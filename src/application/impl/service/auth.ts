@@ -1,8 +1,9 @@
 import type { AuthService } from "../../../domain/service/auth.js";
+import { TokenInvalidError } from "../../../domain/model/auth.js";
 import type { JWT_PAYLOAD } from "../../../domain/model/auth.js";
 import type { ROLE } from "../../../domain/model/user.js";
 import env from "../../../config/env.js";
-import { Ok } from "ts-results-es";
+import { Err, Ok } from "ts-results-es";
 import jwt from "jsonwebtoken";
 
 export const AuthServiceImpl: AuthService = {
@@ -18,18 +19,26 @@ export const AuthServiceImpl: AuthService = {
   },
 
   verifyAccessToken(token: string) {
-    return new Ok(
-      jwt.verify(token, env.ACCESS_TOKEN_SECRET, {
-        complete: false,
-      }) as JWT_PAYLOAD,
-    );
+    try {
+      return new Ok(
+        jwt.verify(token, env.ACCESS_TOKEN_SECRET, {
+          complete: false,
+        }) as JWT_PAYLOAD,
+      );
+    } catch (e) {
+      return new Err(new TokenInvalidError("Access token is invalid"));
+    }
   },
 
   verifyRefreshToken(token: string) {
-    return new Ok(
-      jwt.verify(token, env.REFRESH_TOKEN_SECRET, {
-        complete: false,
-      }) as JWT_PAYLOAD,
-    );
+    try {
+      return new Ok(
+        jwt.verify(token, env.REFRESH_TOKEN_SECRET, {
+          complete: false,
+        }) as JWT_PAYLOAD,
+      );
+    } catch (e) {
+      return new Err(new TokenInvalidError("Refresh token is invalid"));
+    }
   },
 };
