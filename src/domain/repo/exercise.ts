@@ -1,8 +1,10 @@
 import type {
   EXERCISE_DIFFICULTY,
   ExerciseEntity,
+  ExerciseId,
   ExerciseNotFoundError,
 } from "../model/exercise.js";
+import type { ProgramId } from "../model/program.js";
 import type { Result } from "ts-results-es";
 
 export interface ExerciseRepo {
@@ -11,18 +13,18 @@ export interface ExerciseRepo {
     name: string,
   ): Promise<ExerciseEntity>;
   getById(
-    exerciseId: number,
+    exerciseId: ExerciseId,
   ): Promise<Result<ExerciseEntity, ExerciseNotFoundError>>;
   getMany(
     search: string | undefined,
     page: number | undefined,
     limit: number | undefined,
-    programId: number | undefined,
+    programId: ProgramId | undefined,
   ): Promise<ExerciseEntity[]>;
   update(
-    exerciseId: number,
+    exerciseId: ExerciseId,
     name: string | undefined,
     difficulty: EXERCISE_DIFFICULTY | undefined,
   ): Promise<Result<ExerciseEntity, ExerciseNotFoundError>>;
-  delete(exerciseId: number): Promise<Result<void, ExerciseNotFoundError>>;
+  delete(exerciseId: ExerciseId): Promise<Result<void, ExerciseNotFoundError>>;
 }

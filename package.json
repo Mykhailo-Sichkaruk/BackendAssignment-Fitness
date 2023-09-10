@@ -45,6 +45,7 @@
     "swagger-ui-express": "^5.0.0",
     "ts-dotenv": "^0.9.1",
     "ts-node": "^10.9.1",
+    "ts-opaque": "^3.0.1",
     "ts-results-es": "^4.0.0",
     "typescript": "^5.2.2"
   },

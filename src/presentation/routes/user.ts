@@ -1,8 +1,11 @@
+import type { ExerciseId } from "../../domain/model/exercise.js";
 import type { NextFunction, Request, Response } from "express";
+import type { UserId } from "../../domain/model/user.js";
 import { StatusCodes as Code } from "http-status-codes";
 import type { ROLE } from "../../domain/model/user.js";
 import verifyAccessToken from "../middleware/auth.js";
 import isAdmin from "../middleware/isAdmin.js";
+import { create } from "ts-opaque";
 import { Router } from "express";
 import app from "../context.js";
 
@@ -24,7 +27,7 @@ router.put(
         role: ROLE | undefined;
       };
       const result = await app.updateUser(
-        Number(userId),
+        create<UserId>(Number(userId)),
         name,
         surname,
         nickName,
@@ -58,8 +61,8 @@ router.put(
         duration: number;
       };
       const result = await app.completeExercise(
-        Number(exerciseId),
-        Number(userId),
+        create<ExerciseId>(Number(exerciseId)),
+        create<UserId>(Number(userId)),
         date,
         duration,
       );
@@ -131,7 +134,7 @@ router.get(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { userId } = req.params as { userId: string };
-      res.json(await app.getOneUserPrivateData(Number(userId)));
+      res.json(await app.getOneUserPrivateData(create<UserId>(Number(userId))));
     } catch (e) {
       next(e);
     }
@@ -143,7 +146,7 @@ router.get(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { userId } = req.params as { userId: string };
-      res.json(await app.getOneUserPublicData(Number(userId)));
+      res.json(await app.getOneUserPublicData(create<UserId>(Number(userId))));
     } catch (e) {
       next(e);
     }

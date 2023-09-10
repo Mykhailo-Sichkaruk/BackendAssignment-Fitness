@@ -1,16 +1,17 @@
 import { ExerciseNotFoundError } from "../../../domain/model/exercise.js";
+import type { ExerciseEntity } from "../../../domain/model/exercise.js";
 import type { ExerciseRepo } from "../../../domain/repo/exercise.js";
 import prisma from "../../../infrastructure/prisma.js";
 import { Err, Ok } from "ts-results-es";
 
 export const exerciseRepo: ExerciseRepo = {
   async create(difficulty, name) {
-    return await prisma.exercise.create({
+    return (await prisma.exercise.create({
       data: {
         name,
         difficulty,
       },
-    });
+    })) as ExerciseEntity;
   },
 
   async getById(exerciseId) {
@@ -21,11 +22,11 @@ export const exerciseRepo: ExerciseRepo = {
     });
 
     if (!exercise) return new Err(new ExerciseNotFoundError());
-    return new Ok(exercise);
+    return new Ok(exercise as ExerciseEntity);
   },
 
   async getMany(search, page, limit, programId) {
-    return await prisma.exercise.findMany({
+    return (await prisma.exercise.findMany({
       where: {
         name: {
           contains: search,
@@ -36,7 +37,7 @@ export const exerciseRepo: ExerciseRepo = {
       },
       skip: page && limit && page >= 0 ? (page - 1) * limit : undefined,
       take: limit && limit <= 0 ? undefined : limit,
-    });
+    })) as ExerciseEntity[];
   },
 
   async update(exerciseId, name, difficulty) {
@@ -48,7 +49,7 @@ export const exerciseRepo: ExerciseRepo = {
     if (!exercise) return new Err(new ExerciseNotFoundError());
 
     return new Ok(
-      await prisma.exercise.update({
+      (await prisma.exercise.update({
         where: {
           id: exerciseId,
         },
@@ -56,7 +57,7 @@ export const exerciseRepo: ExerciseRepo = {
           name,
           difficulty,
         },
-      }),
+      })) as ExerciseEntity,
     );
   },
 

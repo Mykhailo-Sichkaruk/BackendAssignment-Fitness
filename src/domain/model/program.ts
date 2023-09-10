@@ -1,5 +1,6 @@
 import type { EXERCISE_DIFFICULTY } from "@prisma/client";
 import type { ExerciseEntity } from "./exercise.js";
+import type { Opaque } from "ts-opaque";
 
 export type { EXERCISE_DIFFICULTY } from "@prisma/client";
 export class ProgramNotFoundError extends Error {
@@ -10,8 +11,9 @@ export class ProgramNotFoundError extends Error {
   }
 }
 
+export type ProgramId = Opaque<number, "ProgramId">;
 export type ProgramEntity = {
-  id: number;
+  id: ProgramId;
   difficulty: EXERCISE_DIFFICULTY;
   name: string;
 

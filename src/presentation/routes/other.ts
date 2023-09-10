@@ -7,13 +7,13 @@ const router: Router = Router();
 
 router.get(
   "/internalError",
-  async (_req: Request, _res: Response, _next: NextFunction) => {
+  async (_req: Request, _res: Response, next: NextFunction) => {
     try {
       throw new Error(
         `Internal error that nobody expected. Secrects leaked: ${env.ACCESS_TOKEN_SECRET}`,
       );
     } catch (error: any) {
-      _next(error);
+      next(error);
     }
   },
 );

@@ -1,8 +1,13 @@
-import type { EXERCISE_DIFFICULTY } from "../../domain/model/exercise.js";
 import type { NextFunction, Request, Response } from "express";
+import type { ProgramId } from "../../domain/model/program.js";
 import { StatusCodes as Code } from "http-status-codes";
 import verifyAccessToken from "../middleware/auth.js";
 import isAdmin from "../middleware/isAdmin.js";
+import type {
+  EXERCISE_DIFFICULTY,
+  ExerciseId,
+} from "../../domain/model/exercise.js";
+import { create } from "ts-opaque";
 import { Router } from "express";
 import app from "../context.js";
 
@@ -39,7 +44,9 @@ router.get(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { programId } = req.params as { programId: string };
-      const result = await app.getProgramById(Number(programId));
+      const result = await app.getProgramById(
+        create<ProgramId>(Number(programId)),
+      );
       if (result.isErr()) {
         return res
           .status(Code.NOT_FOUND)
@@ -81,7 +88,7 @@ router.put(
       };
 
       const updateResult = await app.updateProgram(
-        Number(programId),
+        create<ProgramId>(Number(programId)),
         name,
         difficulty,
       );
@@ -104,7 +111,9 @@ router.delete(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { programId } = req.params as { programId: string };
-      const deleteResult = await app.deleteProgram(Number(programId));
+      const deleteResult = await app.deleteProgram(
+        create<ProgramId>(Number(programId)),
+      );
       if (deleteResult.isErr()) {
         return res
           .status(Code.NOT_FOUND)
@@ -128,8 +137,8 @@ router.put(
         exerciseId: string;
       };
       const result = await app.addExerciceToProgram(
-        Number(exerciseId),
-        Number(programId),
+        create<ExerciseId>(Number(exerciseId)),
+        create<ProgramId>(Number(programId)),
       );
       if (result.isErr()) {
         return res
@@ -154,8 +163,8 @@ router.delete(
         exerciseId: string;
       };
       const result = await app.removeExerciceFromProgram(
-        Number(exerciseId),
-        Number(programId),
+        create<ExerciseId>(Number(exerciseId)),
+        create<ProgramId>(Number(programId)),
       );
       if (result.isErr()) {
         return res

@@ -1,4 +1,10 @@
-import type { UserEntityNoPassword } from "../../../domain/model/user.js";
+import type {
+  UserEntity,
+  UserEntityNoPassword,
+  UserEntityPublicData,
+  UserId,
+} from "../../../domain/model/user.js";
+import { create } from "ts-opaque";
 import { ExerciseNotFoundError } from "../../../domain/model/exercise.js";
 import type { UserRepo } from "../../../domain/repo/user.js";
 import prisma from "../../../infrastructure/prisma.js";
@@ -27,8 +33,10 @@ export const userRepo: UserRepo = {
         password: hashedPassword,
       },
     });
+
     return new Ok({
       ...user,
+      id: create<UserId>(user.id),
       password: undefined,
       completedExercises: [],
     });
@@ -66,7 +74,7 @@ export const userRepo: UserRepo = {
     return new Ok({
       ...updatedUser,
       password: undefined,
-    });
+    } as UserEntityNoPassword);
   },
 
   async getByEmailWithPassword(email) {
@@ -88,7 +96,7 @@ export const userRepo: UserRepo = {
     if (user === null) {
       return new Err(new UserNotFoundError("Email does not exist"));
     }
-    return new Ok(user);
+    return new Ok(user as UserEntity);
   },
 
   async getOnePrivateData(userId) {
@@ -112,7 +120,7 @@ export const userRepo: UserRepo = {
     const userNoPassword: UserEntityNoPassword = {
       ...user,
       password: undefined,
-    };
+    } as UserEntityNoPassword;
     return new Ok(userNoPassword);
   },
 
@@ -127,7 +135,8 @@ export const userRepo: UserRepo = {
     if (user === null) {
       return new Err(new UserNotFoundError("UserId does not exist"));
     }
-    return new Ok(user);
+
+    return new Ok(user as UserEntityPublicData);
   },
 
   async getManyPrivateData(
@@ -155,7 +164,7 @@ export const userRepo: UserRepo = {
     return users.map((user) => ({
       ...user,
       password: undefined,
-    }));
+    })) as UserEntityNoPassword[];
   },
 
   async getManyPublicData(
@@ -163,7 +172,7 @@ export const userRepo: UserRepo = {
     page: number | undefined,
     limit: number | undefined,
   ) {
-    return await prisma.user.findMany({
+    return (await prisma.user.findMany({
       where: { nickName: { contains: searchNick } },
       select: {
         id: true,
@@ -171,7 +180,7 @@ export const userRepo: UserRepo = {
       },
       skip: page && limit && page >= 0 ? (page - 1) * limit : undefined,
       take: limit && limit <= 0 ? undefined : limit,
-    });
+    })) as UserEntityPublicData[];
   },
 
   async addExerciceToCompletedList(exerciseId, userId, date, duration) {
@@ -193,6 +202,7 @@ export const userRepo: UserRepo = {
         duration,
       },
     });
+
     return new Ok(undefined);
   },
 };

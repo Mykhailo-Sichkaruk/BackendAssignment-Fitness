@@ -1,10 +1,15 @@
-import type { EXERCISE_DIFFICULTY } from "../domain/model/exercise.js";
+import type {
+  EXERCISE_DIFFICULTY,
+  ExerciseId,
+} from "../domain/model/exercise.js";
 import type { ExerciseService } from "../domain/service/exercise.js";
 import type { ProgramService } from "../domain/service/program.js";
 import type { UserService } from "../domain/service/user.js";
 import type { AuthService } from "../domain/service/auth.js";
-import type { AppService } from "./appService.js";
+import type { ProgramId } from "../domain/model/program.js";
+import type { UserId } from "../domain/model/user.js";
 import type { ROLE } from "../domain/model/user.js";
+import type { AppService } from "./appService.js";
 import { Ok } from "ts-results-es";
 
 export class App implements AppService {
@@ -66,7 +71,7 @@ export class App implements AppService {
   }
 
   async updateUser(
-    userId: number,
+    userId: UserId,
     name: string | undefined,
     surname: string | undefined,
     nickName: string | undefined,
@@ -88,7 +93,7 @@ export class App implements AppService {
   }
 
   async updateExercice(
-    exerciseId: number,
+    exerciseId: ExerciseId,
     difficulty: EXERCISE_DIFFICULTY | undefined,
     name: string | undefined,
   ) {
@@ -99,7 +104,7 @@ export class App implements AppService {
     );
   }
 
-  async getExerciceById(exerciseId: number) {
+  async getExerciceById(exerciseId: ExerciseId) {
     return await this.exerciseService.exerciseRepo.getById(exerciseId);
   }
 
@@ -107,7 +112,7 @@ export class App implements AppService {
     search: string | undefined,
     page: number | undefined,
     limit: number | undefined,
-    programId: number | undefined,
+    programId: ProgramId | undefined,
   ) {
     return await this.exerciseService.exerciseRepo.getMany(
       search,
@@ -117,13 +122,13 @@ export class App implements AppService {
     );
   }
 
-  async deleteExercice(exerciseId: number) {
+  async deleteExercice(exerciseId: ExerciseId) {
     return await this.exerciseService.exerciseRepo.delete(exerciseId);
   }
 
   async completeExercise(
-    exerciseId: number,
-    userId: number,
+    exerciseId: ExerciseId,
+    userId: UserId,
     date: Date,
     duration: number,
   ) {
@@ -135,7 +140,7 @@ export class App implements AppService {
     );
   }
 
-  async getProgramById(programId: number) {
+  async getProgramById(programId: ProgramId) {
     return await this.programService.programRepo.getById(programId);
   }
 
@@ -147,14 +152,17 @@ export class App implements AppService {
     return await this.programService.programRepo.getMany(search, page, limit);
   }
 
-  async addExerciceToProgram(exerciseId: number, programId: number) {
+  async addExerciceToProgram(exerciseId: ExerciseId, programId: ProgramId) {
     return await this.programService.programRepo.addExercise(
       exerciseId,
       programId,
     );
   }
 
-  async removeExerciceFromProgram(exerciseId: number, programId: number) {
+  async removeExerciceFromProgram(
+    exerciseId: ExerciseId,
+    programId: ProgramId,
+  ) {
     return await this.programService.programRepo.removeExervice(
       exerciseId,
       programId,
@@ -166,7 +174,7 @@ export class App implements AppService {
   }
 
   async updateProgram(
-    programId: number,
+    programId: ProgramId,
     name: string | undefined,
     difficulty: EXERCISE_DIFFICULTY | undefined,
   ) {
@@ -177,15 +185,15 @@ export class App implements AppService {
     );
   }
 
-  async deleteProgram(programId: number) {
+  async deleteProgram(programId: ProgramId) {
     return await this.programService.programRepo.delete(programId);
   }
 
-  async getOneUserPrivateData(userId: number) {
+  async getOneUserPrivateData(userId: UserId) {
     return await this.userService.userRepo.getOnePrivateData(userId);
   }
 
-  async getOneUserPublicData(userId: number) {
+  async getOneUserPublicData(userId: UserId) {
     return await this.userService.userRepo.getOnePublicData(userId);
   }
 

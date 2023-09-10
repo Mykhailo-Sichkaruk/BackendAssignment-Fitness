@@ -1,8 +1,13 @@
-import type { EXERCISE_DIFFICULTY } from "../../domain/model/exercise.js";
+import type { ProgramId } from "../../domain/model/program.js";
 import type { NextFunction, Request, Response } from "express";
 import { StatusCodes as Code } from "http-status-codes";
 import verifyAccessToken from "../middleware/auth.js";
 import isAdmin from "../middleware/isAdmin.js";
+import type {
+  EXERCISE_DIFFICULTY,
+  ExerciseId,
+} from "../../domain/model/exercise.js";
+import { create } from "ts-opaque";
 import { Router } from "express";
 import app from "../context.js";
 
@@ -28,7 +33,9 @@ router.get("/", async (req: Request, res: Response, next: NextFunction) => {
         search,
         page === undefined ? undefined : Number(page),
         limit === undefined ? undefined : Number(limit),
-        programId === undefined ? undefined : Number(programId),
+        programId === undefined
+          ? undefined
+          : create<ProgramId>(Number(programId)),
       ),
     );
   } catch (e) {
@@ -41,7 +48,9 @@ router.get(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { exerciseId } = req.params as { exerciseId: string };
-      const result = await app.getExerciceById(Number(exerciseId));
+      const result = await app.getExerciceById(
+        create<ExerciseId>(Number(exerciseId)),
+      );
       if (result.isErr()) {
         return res
           .status(Code.NOT_FOUND)
@@ -84,7 +93,7 @@ router.put(
       };
 
       const updateResult = await app.updateExercice(
-        Number(exerciseId),
+        create<ExerciseId>(Number(exerciseId)),
         difficulty,
         name,
       );
@@ -107,7 +116,9 @@ router.delete(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { exerciseId } = req.params as { exerciseId: string };
-      const deleteResult = await app.deleteExercice(Number(exerciseId));
+      const deleteResult = await app.deleteExercice(
+        create<ExerciseId>(Number(exerciseId)),
+      );
       if (deleteResult.isErr()) {
         return res
           .status(Code.NOT_FOUND)

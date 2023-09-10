@@ -1,5 +1,6 @@
-import type { ROLE } from "@prisma/client";
 import type { ExerciseEntity } from "./exercise.js";
+import type { ROLE } from "@prisma/client";
+import type { Opaque } from "ts-opaque";
 
 export { ROLE } from "@prisma/client";
 
@@ -36,8 +37,9 @@ export type CompletedExercises = {
   duration: number;
 };
 
+export type UserId = Opaque<number, "UserId">;
 export type UserEntity = {
-  id: number;
+  id: UserId;
   name: string;
   surname: string;
   nickName: string;
@@ -53,6 +55,6 @@ export type UserEntityNoPassword = Omit<UserEntity, "password"> & {
 };
 
 export type UserEntityPublicData = {
-  id: number;
+  id: UserId;
   nickName: string;
 };

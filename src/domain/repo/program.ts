@@ -1,5 +1,5 @@
-import type { ExerciseNotFoundError } from "../model/exercise.js";
-import type { ProgramNotFoundError } from "../model/program.js";
+import type { ExerciseId, ExerciseNotFoundError } from "../model/exercise.js";
+import type { ProgramId, ProgramNotFoundError } from "../model/program.js";
 import type { EXERCISE_DIFFICULTY } from "../model/program.js";
 import type { ProgramEntity } from "../model/program.js";
 import type { Result } from "ts-results-es";
@@ -7,25 +7,25 @@ import type { Result } from "ts-results-es";
 export interface ProgramRepo {
   create(name: string, difficulty: EXERCISE_DIFFICULTY): Promise<ProgramEntity>;
   update(
-    programId: number,
+    programId: ProgramId,
     name: string | undefined,
     difficulty: EXERCISE_DIFFICULTY | undefined,
   ): Promise<Result<ProgramEntity, ProgramNotFoundError>>;
   getById(
-    programId: number,
+    programId: ProgramId,
   ): Promise<Result<ProgramEntity, ProgramNotFoundError>>;
   getMany(
     search: string | undefined,
     page: number | undefined,
     limit: number | undefined,
   ): Promise<ProgramEntity[]>;
-  delete(programId: number): Promise<Result<void, ProgramNotFoundError>>;
+  delete(programId: ProgramId): Promise<Result<void, ProgramNotFoundError>>;
   addExercise(
-    exerciseId: number,
-    programId: number,
+    exerciseId: ExerciseId,
+    programId: ProgramId,
   ): Promise<Result<void, ExerciseNotFoundError | ProgramNotFoundError>>;
   removeExervice(
-    exerciseId: number,
-    programId: number,
+    exerciseId: ExerciseId,
+    programId: ProgramId,
   ): Promise<Result<void, ExerciseNotFoundError | ProgramNotFoundError>>;
 }

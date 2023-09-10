@@ -1,6 +1,7 @@
 import type {
   EXERCISE_DIFFICULTY,
   ExerciseEntity,
+  ExerciseId,
   ExerciseNotFoundError,
 } from "../domain/model/exercise.js";
 import type {
@@ -9,10 +10,12 @@ import type {
   UserAlreadyExistsError,
   UserEntityNoPassword,
   UserEntityPublicData,
+  UserId,
   UserNotFoundError,
 } from "../domain/model/user.js";
 import type {
   ProgramEntity,
+  ProgramId,
   ProgramNotFoundError,
 } from "../domain/model/program.js";
 import type { ExerciseService } from "../domain/service/exercise.js";
@@ -37,21 +40,21 @@ export interface AppService {
     name: string,
   ): Promise<ExerciseEntity>;
   updateExercice(
-    exerciseId: number,
+    exerciseId: ExerciseId,
     difficulty: EXERCISE_DIFFICULTY | undefined,
     name: string | undefined,
   ): Promise<Result<ExerciseEntity, ExerciseNotFoundError>>;
   deleteExercice(
-    exerciseId: number,
+    exerciseId: ExerciseId,
   ): Promise<Result<void, ExerciseNotFoundError>>;
   getExerciceById(
-    exerciseId: number,
+    exerciseId: ExerciseId,
   ): Promise<Result<ExerciseEntity, ExerciseNotFoundError>>;
   getManyExercices(
     search: string | undefined,
     page: number | undefined,
     limit: number | undefined,
-    programId: number | undefined,
+    programId: ProgramId | undefined,
   ): Promise<ExerciseEntity[]>;
   registerJWT(
     name: string,
@@ -68,7 +71,7 @@ export interface AppService {
   ): Promise<Result<JWTs, UserNotFoundError | PasswordIncorrectError>>;
   refreshJWT(refreshToken: string): Result<JWTs, TokenInvalidError>;
   updateUser(
-    userId: number,
+    userId: UserId,
     name: string | undefined,
     surname: string | undefined,
     nickName: string | undefined,
@@ -78,8 +81,8 @@ export interface AppService {
   verifyAccessToken(token: string): Result<JWT_PAYLOAD, TokenInvalidError>;
   verifyRefreshToken(token: string): Result<JWTs, TokenInvalidError>;
   completeExercise(
-    exerciseId: number,
-    userId: number,
+    exerciseId: ExerciseId,
+    userId: UserId,
     date: Date,
     duration: number,
   ): Promise<Result<void, ExerciseNotFoundError | UserNotFoundError>>;
@@ -88,7 +91,7 @@ export interface AppService {
     difficulty: EXERCISE_DIFFICULTY,
   ): Promise<ProgramEntity>;
   getProgramById(
-    programId: number,
+    programId: ProgramId,
   ): Promise<Result<ProgramEntity, ProgramNotFoundError>>;
   getManyPrograms(
     search: string | undefined,
@@ -96,24 +99,26 @@ export interface AppService {
     limit: number | undefined,
   ): Promise<ProgramEntity[]>;
   updateProgram(
-    programId: number,
+    programId: ProgramId,
     difficulty: EXERCISE_DIFFICULTY | undefined,
     name: string | undefined,
   ): Promise<Result<ProgramEntity, ProgramNotFoundError>>;
-  deleteProgram(programId: number): Promise<Result<void, ProgramNotFoundError>>;
+  deleteProgram(
+    programId: ProgramId,
+  ): Promise<Result<void, ProgramNotFoundError>>;
   addExerciceToProgram(
-    exerciseId: number,
-    programId: number,
+    exerciseId: ExerciseId,
+    programId: ProgramId,
   ): Promise<Result<void, ExerciseNotFoundError | ProgramNotFoundError>>;
   removeExerciceFromProgram(
-    exerciseId: number,
-    programId: number,
+    exerciseId: ExerciseId,
+    programId: ProgramId,
   ): Promise<Result<void, ProgramNotFoundError | ExerciseNotFoundError>>;
   getOneUserPrivateData(
-    userId: number,
+    userId: UserId,
   ): Promise<Result<UserEntityNoPassword, UserNotFoundError>>;
   getOneUserPrivateData(
-    userId: number,
+    userId: UserId,
   ): Promise<Result<UserEntityPublicData, UserNotFoundError>>;
   getManyUsersPrivateData(
     searchNick: string | undefined,

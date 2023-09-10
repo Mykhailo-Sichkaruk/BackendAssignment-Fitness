@@ -4,9 +4,10 @@ import type {
   UserEntity,
   UserEntityNoPassword,
   UserEntityPublicData,
+  UserId,
   UserNotFoundError,
 } from "../model/user.js";
-import type { ExerciseNotFoundError } from "../model/exercise.js";
+import type { ExerciseId, ExerciseNotFoundError } from "../model/exercise.js";
 import type { Result } from "ts-results-es";
 
 export interface UserRepo {
@@ -20,7 +21,7 @@ export interface UserRepo {
     hashedPassword: string,
   ): Promise<Result<UserEntityNoPassword, UserAlreadyExistsError>>;
   update(
-    userId: number,
+    userId: UserId,
     name: string | undefined,
     surname: string | undefined,
     nickName: string | undefined,
@@ -31,10 +32,10 @@ export interface UserRepo {
     email: string,
   ): Promise<Result<UserEntity, UserNotFoundError>>;
   getOnePrivateData(
-    userId: number,
+    userId: UserId,
   ): Promise<Result<UserEntityNoPassword, UserNotFoundError>>;
   getOnePublicData(
-    userId: number,
+    userId: UserId,
   ): Promise<Result<UserEntityPublicData, UserNotFoundError>>;
   getManyPrivateData(
     searchNick: string | undefined,
@@ -47,8 +48,8 @@ export interface UserRepo {
     limit: number | undefined,
   ): Promise<UserEntityPublicData[]>;
   addExerciceToCompletedList(
-    exerciseId: number,
-    userId: number,
+    exerciseId: ExerciseId,
+    userId: UserId,
     date: Date,
     duration: number,
   ): Promise<Result<void, UserNotFoundError | ExerciseNotFoundError>>;

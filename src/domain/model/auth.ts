@@ -1,4 +1,4 @@
-import type { ROLE } from "./user.js";
+import type { ROLE, UserId } from "./user.js";
 
 export class TokenInvalidError extends Error {
   name: "TokenInvalidError";
@@ -9,7 +9,7 @@ export class TokenInvalidError extends Error {
 }
 
 export type JWT_PAYLOAD = {
-  userId: number;
+  userId: UserId;
   role: ROLE;
 };
 

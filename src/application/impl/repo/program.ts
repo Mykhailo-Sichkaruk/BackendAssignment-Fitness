@@ -1,4 +1,5 @@
 import { ExerciseNotFoundError } from "../../../domain/model/exercise.js";
+import type { ProgramEntity } from "../../../domain/model/program.js";
 import { ProgramNotFoundError } from "../../../domain/model/program.js";
 import type { ProgramRepo } from "../../../domain/repo/program.js";
 import prisma from "../../../infrastructure/prisma.js";
@@ -6,7 +7,7 @@ import { Err, Ok } from "ts-results-es";
 
 export const programRepo: ProgramRepo = {
   async create(name, difficulty) {
-    return await prisma.program.create({
+    return (await prisma.program.create({
       data: {
         name,
         difficulty,
@@ -14,7 +15,7 @@ export const programRepo: ProgramRepo = {
       include: {
         exercises: true,
       },
-    });
+    })) as ProgramEntity;
   },
 
   async getById(programId) {
@@ -28,11 +29,11 @@ export const programRepo: ProgramRepo = {
     });
     if (!program) return new Err(new ProgramNotFoundError());
 
-    return new Ok(program);
+    return new Ok(program as ProgramEntity);
   },
 
   async getMany(search, page, limit) {
-    const programs = await prisma.program.findMany({
+    return (await prisma.program.findMany({
       where: {
         name: {
           contains: search,
@@ -43,9 +44,7 @@ export const programRepo: ProgramRepo = {
       },
       skip: page && limit && page >= 0 ? (page - 1) * limit : undefined,
       take: limit && limit <= 0 ? undefined : limit,
-    });
-
-    return programs;
+    })) as ProgramEntity[];
   },
 
   async update(programId, name, difficulty) {
@@ -57,7 +56,7 @@ export const programRepo: ProgramRepo = {
     if (!program) return new Err(new ProgramNotFoundError());
 
     return new Ok(
-      await prisma.program.update({
+      (await prisma.program.update({
         where: {
           id: programId,
         },
@@ -68,7 +67,7 @@ export const programRepo: ProgramRepo = {
         include: {
           exercises: true,
         },
-      }),
+      })) as ProgramEntity,
     );
   },
 
