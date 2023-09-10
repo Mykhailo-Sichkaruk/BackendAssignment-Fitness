@@ -3,6 +3,7 @@
 **/src/infrastructure/sentenceGenerator/chatgptTypes.zod.ts
 ssl.*
 
+build/
 
 # Logs
 logs
