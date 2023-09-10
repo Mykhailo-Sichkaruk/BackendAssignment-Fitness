@@ -1,0 +1,1058 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "version": "1",
+    "title": "",
+    "description": ""
+  },
+  "paths": {
+    "/auth/register": {
+      "post": {
+        "operationId": "register",
+        "description": "Register a new user, get JWT tokens.",
+        "tags": ["auth"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Register"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JWTs"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "operationId": "login",
+        "description": "Enter your email and password and get JWT tokens.",
+        "tags": ["auth"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Login"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful login",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JWTs"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/refresh": {
+      "post": {
+        "operationId": "refroshJWT",
+        "description": "Refresh JWT tokens. Requires valid refresh token.",
+        "tags": ["auth"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RefreshToken"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful refresh",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JWTs"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/exercise/{exerciseId}": {
+      "get": {
+        "operationId": "getExercise",
+        "tags": ["exercise"],
+        "security": [{ "bearerAuth": [] }],
+        "description": "Get exercise by id.",
+        "parameters": [
+          {
+            "name": "exerciseId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Exercise"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "deleteExercise",
+        "tags": ["exercise", "ADMIN ONLY"],
+        "security": [{ "bearerAuth": [] }],
+        "description": "ADMIN role requred. Delete exercise by id.",
+        "parameters": [
+          {
+            "name": "exerciseId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "operationId": "updateExercise",
+        "tags": ["exercise", "ADMIN ONLY"],
+        "security": [{ "bearerAuth": [] }],
+        "description": "ADMIN role requred. Update exercise",
+        "parameters": [
+          {
+            "name": "exerciseId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/updateExercise"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Exercise"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/exercise": {
+      "get": {
+        "tags": ["exercise"],
+        "security": [{ "bearerAuth": [] }],
+        "operationId": "getManyExercises",
+        "description": "Get many exercises. Filter by name, pagination.",
+        "parameters": [
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter by exercise name."
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "description": "Page number."
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "description": "Number of items per page."
+          },
+          {
+            "name": "programId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "description": "Filter by program id."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Exercise"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "createExercise",
+        "tags": ["exercise", "ADMIN ONLY"],
+        "security": [{ "bearerAuth": [] }],
+        "description": "ADMIN role requred. Create exercise.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/createExercice"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Exercise"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/program/{programId}": {
+      "get": {
+        "operationId": "getProgram",
+        "tags": ["program"],
+        "security": [{ "bearerAuth": [] }],
+        "description": "",
+        "parameters": [
+          {
+            "name": "programId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Program"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "deleteProgram",
+        "tags": ["program", "ADMIN ONLY"],
+        "security": [{ "bearerAuth": [] }],
+        "description": "ADMIN role requred. Delete program by id.",
+        "parameters": [
+          {
+            "name": "programId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "operationId": "updateProgram",
+        "tags": ["program", "ADMIN ONLY"],
+        "security": [{ "bearerAuth": [] }],
+        "description": "ADMIN role requred. Update program",
+        "parameters": [
+          {
+            "name": "programId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/updateProgram"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Program"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/program": {
+      "get": {
+        "tags": ["program"],
+        "security": [{ "bearerAuth": [] }],
+        "operationId": "getManyPrograms",
+        "description": "Get many programs. Filter by name, pagination.",
+        "parameters": [
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter by program name."
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "description": "Page number."
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "description": "Number of items per page."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Program"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "createProgram",
+        "tags": ["program", "ADMIN ONLY"],
+        "security": [{ "bearerAuth": [] }],
+        "description": "ADMIN role requred. Create program",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/createExercice"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Program"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/program/{programId}/exercise/{exerciseId}": {
+      "put": {
+        "operationId": "appExerciseToProgram",
+        "description": "ADMIN role requred. Add exercise to program",
+        "tags": ["program", "ADMIN ONLY"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "programId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          {
+            "name": "exerciseId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "removeExerciseFromProgram",
+        "description": "ADMIN role requred. Remove exercise from program",
+        "tags": ["program", "ADMIN ONLY"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "programId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          {
+            "name": "exerciseId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/publicData": {
+      "get": {
+        "operationId": "getManyUsersPublicData",
+        "description": "",
+        "tags": ["userData"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "searchNick",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/UserPublicData"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/privateData": {
+      "get": {
+        "operationId": "getManyUsersPrivateData",
+        "description": "ADMIN role requred. Get private users data.",
+        "tags": ["userData", "ADMIN ONLY"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "searchNick",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/{userId}": {
+      "put": {
+        "operationId": "updateUser",
+        "description": "",
+        "tags": ["userData"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/updateUser"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/{userId}/completeExercise/{exerciseId}": {
+      "put": {
+        "operationId": "updateUser",
+        "description": "",
+        "tags": ["userData"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          {
+            "name": "exerciseId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/{userId}/publicData": {
+      "get": {
+        "operationId": "getOneUserPublicData",
+        "description": "",
+        "tags": ["userData"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserPublicData"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/{userId}/privateData": {
+      "get": {
+        "operationId": "getOneUserPrivateData",
+        "description": "ADMIN role requred. Get one user data.",
+        "tags": ["userData", "ADMIN ONLY"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/other/internalError": {
+      "get": {
+        "operationId": "internalError",
+        "description": "Emulate an internal error.",
+        "tags": ["other"],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/other/makeCoffee": {
+      "get": {
+        "operationId": "makeCoffee",
+        "description": "Emulate a long running task.",
+        "tags": ["other"],
+        "responses": {
+          "418": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "schemas": {
+      "ROLE": {
+        "type": "string",
+        "enum": ["ADMIN", "USER"]
+      },
+      "EXERCISE_DIFFICULTY": {
+        "type": "string",
+        "enum": ["EASY", "MEDIUM", "HARD"]
+      },
+      "Register": {
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "surname": {
+            "type": "string"
+          },
+          "nickName": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "age": {
+            "type": "integer",
+            "minimum": 16
+          },
+          "password": {
+            "type": "string"
+          },
+          "role": {
+            "$ref": "#/components/schemas/ROLE"
+          }
+        },
+        "required": [
+          "name",
+          "surname",
+          "nickName",
+          "email",
+          "age",
+          "password",
+          "role"
+        ]
+      },
+      "Login": {
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "password": {
+            "type": "string"
+          }
+        },
+        "required": ["email", "password"]
+      },
+      "createExercice": {
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "difficulty": {
+            "$ref": "#/components/schemas/EXERCISE_DIFFICULTY"
+          }
+        },
+        "required": ["name", "difficulty"]
+      },
+      "updateExercise": {
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "difficulty": {
+            "$ref": "#/components/schemas/EXERCISE_DIFFICULTY"
+          }
+        },
+        "required": ["name", "difficulty"]
+      },
+      "updateProgram": {
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "difficulty": {
+            "$ref": "#/components/schemas/EXERCISE_DIFFICULTY"
+          }
+        }
+      },
+      "User": {
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "surname": {
+            "type": "string"
+          },
+          "nickName": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "age": {
+            "type": "number"
+          },
+          "role": {
+            "$ref": "#/components/schemas/ROLE"
+          },
+          "completedExercises": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CompletedExercise"
+            }
+          }
+        },
+        "required": ["name", "surname", "nickName", "email", "age", "role"]
+      },
+      "UserPublicData": {
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "nickName": {
+            "type": "string"
+          }
+        },
+        "required": ["name", "nickName"]
+      },
+      "CompletedExercise": {
+        "properties": {
+          "exerciseId": {
+            "type": "number"
+          },
+          "date": {
+            "type": "string"
+          },
+          "duration": {
+            "type": "string"
+          },
+          "nickName": {
+            "type": "string"
+          }
+        }
+      },
+      "Exercise": {
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "difficulty": {
+            "$ref": "#/components/schemas/EXERCISE_DIFFICULTY"
+          }
+        },
+        "required": ["name", "difficulty"]
+      },
+      "Program": {
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "difficulty": {
+            "$ref": "#/components/schemas/EXERCISE_DIFFICULTY"
+          },
+          "exercises": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Exercise"
+            }
+          }
+        },
+        "required": ["name", "difficulty"]
+      },
+      "JWTs": {
+        "properties": {
+          "accessToken": {
+            "type": "string"
+          },
+          "refreshToken": {
+            "type": "string"
+          }
+        },
+        "required": ["accessToken", "refreshToken"]
+      },
+      "RefreshToken": {
+        "properties": {
+          "refreshToken": {
+            "type": "string"
+          }
+        },
+        "required": ["refreshToken"]
+      },
+      "updateUser": {
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "surname": {
+            "type": "string"
+          },
+          "nickName": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "age": {
+            "type": "number"
+          },
+          "role": {
+            "$ref": "#/components/schemas/ROLE"
+          }
+        }
+      }
+    }
+  }
+}
