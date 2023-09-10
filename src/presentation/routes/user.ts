@@ -143,7 +143,7 @@ router.get(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { userId } = req.params as { userId: string };
-      res.json(await app.getOneUserPrivateData(Number(userId)));
+      res.json(await app.getOneUserPublicData(Number(userId)));
     } catch (e) {
       next(e);
     }
