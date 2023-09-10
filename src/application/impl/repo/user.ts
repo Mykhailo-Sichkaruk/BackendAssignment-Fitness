@@ -148,8 +148,8 @@ export const userRepo: UserRepo = {
           },
         },
       },
-      skip: page && limit ? (page - 1) * limit : 0,
-      take: limit,
+      skip: page && limit && page >= 0 ? (page - 1) * limit : undefined,
+      take: limit && limit <= 0 ? undefined : limit,
     });
 
     return users.map((user) => ({
@@ -169,8 +169,8 @@ export const userRepo: UserRepo = {
         id: true,
         nickName: true,
       },
-      skip: page && limit ? (page - 1) * limit : 0,
-      take: limit,
+      skip: page && limit && page >= 0 ? (page - 1) * limit : undefined,
+      take: limit && limit <= 0 ? undefined : limit,
     });
   },
 

@@ -41,9 +41,8 @@ export const programRepo: ProgramRepo = {
       include: {
         exercises: true,
       },
-
-      skip: page && limit ? (page - 1) * limit : 0,
-      take: limit,
+      skip: page && limit && page >= 0 ? (page - 1) * limit : undefined,
+      take: limit && limit <= 0 ? undefined : limit,
     });
 
     return programs;
