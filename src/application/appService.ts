@@ -66,6 +66,7 @@ export interface AppService {
     email: string,
     password: string,
   ): Promise<Result<JWTs, UserNotFoundError | PasswordIncorrectError>>;
+  refreshJWT(refreshToken: string): Result<JWTs, TokenInvalidError>;
   updateUser(
     userId: number,
     name: string | undefined,

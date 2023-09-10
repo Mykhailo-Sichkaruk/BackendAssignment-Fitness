@@ -57,6 +57,14 @@ export class App implements AppService {
     return new Ok(this.authService.generateTokens(user.id, user.role));
   }
 
+  refreshJWT(refreshToken: string) {
+    const verifyResult = this.authService.verifyRefreshToken(refreshToken);
+    if (verifyResult.isErr()) return verifyResult;
+    const { userId, role } = verifyResult.value;
+
+    return new Ok(this.authService.generateTokens(userId, role));
+  }
+
   async updateUser(
     userId: number,
     name: string | undefined,
