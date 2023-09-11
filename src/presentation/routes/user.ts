@@ -1,10 +1,11 @@
 import type { NextFunction, Request, Response } from "express";
+import userSelfAction from "../middleware/userSelfAction.js";
 import type { ExerciseId } from "#domain/model/exercise.js";
 import { StatusCodes as Code } from "http-status-codes";
 import verifyAccessToken from "../middleware/auth.js";
 import type { UserId } from "#domain/model/user.js";
-import type { ROLE } from "#domain/model/user.js";
 import isAdmin from "../middleware/isAdmin.js";
+import { ROLE } from "#domain/model/user.js";
 import { create } from "ts-opaque";
 import { Router } from "express";
 import app from "../context.js";
@@ -15,7 +16,7 @@ router.use(verifyAccessToken);
 
 router.put(
   "/:userId",
-  // TODO: add logic with checking if user is admin or updates his own data
+  userSelfAction,
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { userId } = req.params as { userId: string };
@@ -49,7 +50,7 @@ router.put(
 
 router.put(
   "/:userId/completeExercise/:exerciseId",
-  // TODO: add logic with checking if user is admin or updates his own data
+  userSelfAction,
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { userId, exerciseId } = req.params as {
@@ -57,13 +58,13 @@ router.put(
         exerciseId: string;
       };
       const { date, duration } = req.body as {
-        date: Date;
+        date: string;
         duration: number;
       };
       const result = await app.completeExercise(
         create<ExerciseId>(Number(exerciseId)),
         create<UserId>(Number(userId)),
-        date,
+        new Date(date),
         duration,
       );
       if (result.isErr()) {
@@ -78,6 +79,24 @@ router.put(
     }
   },
 );
+
+router.get("/me", async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    if (req.user?.userId === undefined) {
+      return res.status(Code.NOT_FOUND).json({ message: "User not found" });
+    }
+    const user = await app.getOneUserPrivateData(
+      create<UserId>(Number(req.user.userId)),
+    );
+    if (user.isErr()) {
+      return res.status(Code.NOT_FOUND).json({ message: user.error.message });
+    }
+
+    res.json(user.value);
+  } catch (e) {
+    next(e);
+  }
+});
 
 router.get(
   "/publicData",
@@ -130,11 +149,24 @@ router.get(
 
 router.get(
   "/:userId/privateData",
-  isAdmin,
+  userSelfAction,
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { userId } = req.params as { userId: string };
-      res.json(await app.getOneUserPrivateData(create<UserId>(Number(userId))));
+      const user = await app.getOneUserPrivateData(
+        create<UserId>(Number(userId)),
+      );
+      if (user.isErr()) {
+        return res.status(Code.NOT_FOUND).json({ message: user.error.message });
+      }
+
+      if (user.value.id !== req.user?.userId && req.user?.role !== ROLE.ADMIN) {
+        return res.status(Code.FORBIDDEN).json({
+          message: "You can't update other user's data, unless you are ADMIN",
+        });
+      }
+
+      res.json(user.value);
     } catch (e) {
       next(e);
     }
