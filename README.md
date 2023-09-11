@@ -23,15 +23,16 @@ You need to have `docker` and `docker-compose`
 
 
 
-then you can run tests
-
-
+- now you can run tests
 
 ```sh
-
+ npm i 
  npm test
 
 ```
+
+- Open UI documenation in browser: `http://localhost:3000/docs`
+
 
 
 
@@ -54,6 +55,8 @@ then you can run tests
 - TypeScript brand types: I use custom types for IDs (like UserId, and ProgramId). With brand types, it is hard to pass ExerciseId to ProgramId because you explicitly need to create an instance of a new type.
 
 - Path aliases: pretty paths without "../../../" in imports
+
+- Graceful shudown: Master process makes fork of itself and child process runs http server. If http server have unhandledException it closes and master process starts new http server. This prevents application from leaking after unhandled error and from terminating after one error. 
 
 
 
