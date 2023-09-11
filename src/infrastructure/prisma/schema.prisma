@@ -30,14 +30,14 @@ model User {
   password           String
   age                Int
   role               ROLE
-  completedExercises CompletedExercise[]
+  completedExercises CompletedExercise[] 
 }
 
 model CompletedExercise {
   id         Int      @id @default(autoincrement())
-  user       User     @relation(fields: [userId], references: [id])
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId     Int
-  exercise   Exercise @relation(fields: [exerciseId], references: [id])
+  exercise   Exercise @relation(fields: [exerciseId], references: [id], onDelete: Cascade)
   exerciseId Int
   date       DateTime
   duration   Int
