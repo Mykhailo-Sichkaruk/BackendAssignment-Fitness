@@ -31,12 +31,16 @@ export const exerciseRepo: ExerciseRepo = {
         name: {
           contains: search,
         },
-        programs: {
-          some: { id: programId && programId <= 0 ? undefined : programId },
-        },
+        ...(programId
+          ? {
+              programs: {
+                some: { id: programId },
+              },
+            }
+          : {}),
       },
-      skip: page && limit && page >= 0 ? (page - 1) * limit : undefined,
-      take: limit && limit <= 0 ? undefined : limit,
+      skip: page && limit && page > 0 ? (page - 1) * limit : undefined,
+      take: limit && limit < 0 ? undefined : limit,
     })) as ExerciseEntity[];
   },
 
