@@ -4,6 +4,7 @@
 ssl.*
 
 build/
+test/api/
 
 # Logs
 logs
