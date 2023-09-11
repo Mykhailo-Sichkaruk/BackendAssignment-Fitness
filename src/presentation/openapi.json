@@ -103,7 +103,7 @@
             "required": true,
             "schema": {
               "type": "integer",
-              "minimum": 1
+              "minimum": 0
             }
           }
         ],
@@ -210,7 +210,7 @@
             "required": false,
             "schema": {
               "type": "integer",
-              "minimum": 1
+              "minimum": 0
             },
             "description": "Page number."
           },
@@ -220,7 +220,7 @@
             "required": false,
             "schema": {
               "type": "integer",
-              "minimum": 1
+              "minimum": 0
             },
             "description": "Number of items per page."
           },
@@ -399,7 +399,7 @@
             "required": false,
             "schema": {
               "type": "integer",
-              "minimum": 1
+              "minimum": 0
             },
             "description": "Page number."
           },
@@ -409,7 +409,7 @@
             "required": false,
             "schema": {
               "type": "integer",
-              "minimum": 1
+              "minimum": 0
             },
             "description": "Number of items per page."
           }
@@ -460,7 +460,7 @@
     },
     "/program/{programId}/exercise/{exerciseId}": {
       "put": {
-        "operationId": "appExerciseToProgram",
+        "operationId": "addExerciseToProgram",
         "description": "ADMIN role requred. Add exercise to program",
         "tags": ["program", "ADMIN ONLY"],
         "security": [{ "bearerAuth": [] }],
@@ -557,7 +557,7 @@
             "required": false,
             "schema": {
               "type": "integer",
-              "minimum": 1
+              "minimum": 0
             }
           },
           {
@@ -566,7 +566,7 @@
             "required": false,
             "schema": {
               "type": "integer",
-              "minimum": 1
+              "minimum": 0
             }
           }
         ],
@@ -608,7 +608,7 @@
             "required": false,
             "schema": {
               "type": "integer",
-              "minimum": 1
+              "minimum": 0
             }
           },
           {
@@ -617,7 +617,7 @@
             "required": false,
             "schema": {
               "type": "integer",
-              "minimum": 1
+              "minimum": 0
             }
           }
         ],
@@ -680,7 +680,7 @@
     },
     "/user/{userId}/completeExercise/{exerciseId}": {
       "put": {
-        "operationId": "updateUser",
+        "operationId": "completeExercise",
         "description": "",
         "tags": ["userData"],
         "security": [{ "bearerAuth": [] }],
@@ -704,6 +704,15 @@
             }
           }
         ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/completeExercise"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "",
@@ -766,6 +775,26 @@
             }
           }
         ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/me": {
+      "get": {
+        "operationId": "getMyPrivateData",
+        "description": "Get self data.",
+        "tags": ["userData", "ADMIN ONLY"],
+        "security": [{ "bearerAuth": [] }],
         "responses": {
           "200": {
             "description": "",
@@ -847,6 +876,7 @@
         "enum": ["EASY", "MEDIUM", "HARD"]
       },
       "Register": {
+        "type": "object",
         "properties": {
           "name": {
             "type": "string"
@@ -883,6 +913,7 @@
         ]
       },
       "Login": {
+        "type": "object",
         "properties": {
           "email": {
             "type": "string",
@@ -895,6 +926,7 @@
         "required": ["email", "password"]
       },
       "createExercice": {
+        "type": "object",
         "properties": {
           "name": {
             "type": "string"
@@ -906,6 +938,7 @@
         "required": ["name", "difficulty"]
       },
       "updateExercise": {
+        "type": "object",
         "properties": {
           "name": {
             "type": "string"
@@ -917,6 +950,7 @@
         "required": ["name", "difficulty"]
       },
       "updateProgram": {
+        "type": "object",
         "properties": {
           "name": {
             "type": "string"
@@ -927,7 +961,11 @@
         }
       },
       "User": {
+        "type": "object",
         "properties": {
+          "id": {
+            "type": "number"
+          },
           "name": {
             "type": "string"
           },
@@ -957,6 +995,7 @@
         "required": ["name", "surname", "nickName", "email", "age", "role"]
       },
       "UserPublicData": {
+        "type": "object",
         "properties": {
           "id": {
             "type": "number"
@@ -968,6 +1007,7 @@
         "required": ["name", "nickName"]
       },
       "CompletedExercise": {
+        "type": "object",
         "properties": {
           "exerciseId": {
             "type": "number"
@@ -981,10 +1021,15 @@
           "nickName": {
             "type": "string"
           }
-        }
+        },
+        "required": ["exerciseId", "date", "duration", "nickName"]
       },
       "Exercise": {
+        "type": "object",
         "properties": {
+          "id": {
+            "type": "number"
+          },
           "name": {
             "type": "string"
           },
@@ -992,10 +1037,14 @@
             "$ref": "#/components/schemas/EXERCISE_DIFFICULTY"
           }
         },
-        "required": ["name", "difficulty"]
+        "required": ["id", "name", "difficulty"]
       },
       "Program": {
+        "type": "object",
         "properties": {
+          "id": {
+            "type": "number"
+          },
           "name": {
             "type": "string"
           },
@@ -1009,9 +1058,10 @@
             }
           }
         },
-        "required": ["name", "difficulty"]
+        "required": ["id", "name", "difficulty", "exercises"]
       },
       "JWTs": {
+        "type": "object",
         "properties": {
           "accessToken": {
             "type": "string"
@@ -1023,6 +1073,7 @@
         "required": ["accessToken", "refreshToken"]
       },
       "RefreshToken": {
+        "type": "object",
         "properties": {
           "refreshToken": {
             "type": "string"
@@ -1030,7 +1081,21 @@
         },
         "required": ["refreshToken"]
       },
+      "completeExercise": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "duration": {
+            "type": "integer"
+          }
+        },
+        "required": ["duration", "date"]
+      },
       "updateUser": {
+        "type": "object",
         "properties": {
           "name": {
             "type": "string"
